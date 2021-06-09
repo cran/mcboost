@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MCBoost - Basics and Extensions</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">MCBoost - Basics and Extensions</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;mcboost&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Loading required namespace: mlr3pipelines</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;mlr3&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">83007</span>)</span></code></pre></div>
+<div id="example-0-multi-accuracy-in-6-lines-of-code" class="section level2">
+<h2>Example 0: Multi-Accuracy in 6 lines of code</h2>
+<p>As a brief introduction we show how to use <strong>mcboost</strong> in only 6 lines of code. For our example, we use the data from the <em>sonar</em> binary classification task. We instantiate a <code>MCBoost</code> instance by specifying a <code>auditor_fitter</code>. This <code>auditor_fitter</code> defines the splits into groups in each boosting iteration based on the obtained residuals. In this example, we choose a <code>Tree</code> based model. Afterwards, we run the <code>$multicalibrate()</code> method on our data to start multi-calibration. We only use the first 200 samples of the <em>sonar</em> data set to train our multi-calibrated model.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tsk <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> tsk<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> tsk<span class="sc">$</span>feature_names)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>l <span class="ot">=</span> tsk<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> tsk<span class="sc">$</span>target_names)[[<span class="dv">1</span>]]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">=</span> MCBoost<span class="sc">$</span><span class="fu">new</span>(<span class="at">auditor_fitter =</span> <span class="st">&quot;TreeAuditorFitter&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">multicalibrate</span>(d[<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>,], l[<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>])</span></code></pre></div>
+<p>After the calibration, we use the model to predict on the left-out data (8 observations).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">predict_probs</span>(d[<span class="dv">201</span><span class="sc">:</span><span class="dv">208</span>,])</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.9077953 0.9077953 1.0000000 1.0000000 0.3387929 1.0000000 0.3387929</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [8] 0.2116734</span></span></code></pre></div>
+</div>
+<div id="what-does-mcboost-do" class="section level2">
+<h2>What does mcboost do?</h2>
+<p>Internally mcboost runs the following procedure <code>max_iter</code> times:</p>
+<ol style="list-style-type: decimal">
+<li>Predict on X using the model from the previous iteration, <code>init_predictor</code> in the first iteration.</li>
+<li>Compute the residuals <code>res = y - y_hat</code></li>
+<li>Split predictions into <code>num_buckets</code> according to <code>y_hat</code>.</li>
+<li>Fit the auditor (<code>auditor_fitter</code>) (here called<code>c(x)</code>) on the data in each bucket with target variable <code>r</code>.</li>
+<li>Compute <code>misscal = mean(c(x) * res(x))</code></li>
+<li>if <code>misscal &gt; alpha</code>: For the bucket with highest <code>misscal</code>, update the model using the prediction <code>c(x)</code>. else: Stop the procedure</li>
+</ol>
+<p>A lot more details can be found either in the code, or in the corresponding publications.</p>
+</div>
+<div id="example-1-multi-accuracy-boosting-on-the-adult-dataset" class="section level2">
+<h2>Example 1: Multi-Accuracy Boosting on the Adult Dataset</h2>
+<p>First we download the data and create an <code>mlr3</code> classification task:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>adult_train <span class="ot">=</span> <span class="fu">fread</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_train.csv&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>adult_train<span class="sc">$</span>Country <span class="ot">=</span> <span class="cn">NULL</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>adult_train<span class="sc">$</span>fnlwgt <span class="ot">=</span> <span class="cn">NULL</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>train_tsk <span class="ot">=</span> TaskClassif<span class="sc">$</span><span class="fu">new</span>(<span class="st">&quot;adult_train&quot;</span>, adult_train, <span class="at">target =</span> <span class="st">&quot;Target&quot;</span>)</span></code></pre></div>
+<p>We removed the features <code>Country</code> and <code>fnlwgt</code> since we expect them to have no predictive power. <code>fnlwgt</code> means final weight and aims to allocate similar weights to people with similar demographic characteristics, while <code>Country</code> has 42 distinct levels but 89 % of the observations are from the United States.</p>
+<div id="preprocessing" class="section level3">
+<h3>1.1 Preprocessing</h3>
+<p>Then we do basic preprocessing:</p>
+<ul>
+<li>Collapse rarest factors according to their prevalence</li>
+<li>Drop missing factor levels</li>
+<li>One-hot encode categorical variables</li>
+<li>Impute NA’s using a histogram approach</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3pipelines)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>pipe <span class="ot">=</span> <span class="fu">po</span>(<span class="st">&quot;collapsefactors&quot;</span>, <span class="at">no_collapse_above_prevalence =</span> <span class="fl">0.0006</span>) <span class="sc">%&gt;&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;fixfactors&quot;</span>) <span class="sc">%&gt;&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;encode&quot;</span>) <span class="sc">%&gt;&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">po</span>(<span class="st">&quot;imputehist&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>prep_task <span class="ot">=</span> pipe<span class="sc">$</span><span class="fu">train</span>(train_tsk)[[<span class="dv">1</span>]]</span></code></pre></div>
+<p>In order to simulate settings where a sensitive feature is not available, we remove the (dummy encoded) feature <code>Race</code> from the training task.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>prep_task<span class="sc">$</span><span class="fu">set_col_roles</span>(<span class="fu">c</span>(<span class="st">&quot;Race.Amer.Indian.Eskimo&quot;</span>, <span class="st">&quot;Race.Asian.Pac.Islander&quot;</span>, <span class="st">&quot;Race.Black&quot;</span>, <span class="st">&quot;Race.Other&quot;</span>, <span class="st">&quot;Race.White&quot;</span>), <span class="at">remove_from =</span> <span class="st">&quot;feature&quot;</span>)</span></code></pre></div>
+<p>Now we fit a <code>random forest</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>l <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;classif.ranger&quot;</span>, <span class="at">num.trees =</span> 10L, <span class="at">predict_type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>l<span class="sc">$</span><span class="fu">train</span>(prep_task)</span></code></pre></div>
+</div>
+<div id="mcboost" class="section level3">
+<h3>1.2 MCBoost</h3>
+<p>A simple way to use the predictions from any <code>model</code> in <strong>mcboost</strong> is to wrap the predict function and provide it as an initial predictor. This can be done from any model / any library. Note, that we have to make sure, that our <code>init_predictor</code> returns a numeric vector of predictions.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>init_predictor <span class="ot">=</span> <span class="cf">function</span>(data) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  l<span class="sc">$</span><span class="fu">predict_newdata</span>(data)<span class="sc">$</span>prob[, <span class="dv">2</span>]</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>As <strong>mcboost</strong> requires the data to be provided in <code>X, y</code> format (a <code>data.table</code> or <code>data.frame</code> of features and a vector of labels), we create those two objects.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> prep_task<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> prep_task<span class="sc">$</span>feature_names)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>labels <span class="ot">=</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">one_hot</span>(prep_task<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> prep_task<span class="sc">$</span>target_names)[[<span class="dv">1</span>]])</span></code></pre></div>
+<p>We use a ridge regularized linear regression model as the auditor.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">=</span> MCBoost<span class="sc">$</span><span class="fu">new</span>(<span class="at">auditor_fitter =</span> <span class="st">&quot;RidgeAuditorFitter&quot;</span>, <span class="at">init_predictor =</span> init_predictor)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">multicalibrate</span>(data, labels)</span></code></pre></div>
+<p>The <code>print</code> method additionally lists the average auditor values in the different buckets in each iteration:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mc</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;MCBoost&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Public:</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     alpha: 1e-04</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     auditor_effect: function (x, aggregate = TRUE, t = Inf, predictor_args = NULL, </span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     auditor_effects: list</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     auditor_fitter: RidgeAuditorFitter, LearnerAuditorFitter, AuditorFitter, R6</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     bucket_strategy: simple</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     eta: 1</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     initialize: function (max_iter = 5, alpha = 1e-04, eta = 1, partition = TRUE, </span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     iter_corr: list</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     iter_models: list</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     iter_partitions: list</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     iter_sampling: none</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     max_iter: 5</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     multicalibrate: function (data, labels, predictor_args = NULL, ...) </span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     multiplicative: TRUE</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     num_buckets: 2</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     partition: TRUE</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     predict_probs: function (x, t = Inf, predictor_args = NULL, audit = FALSE, ...) </span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     predictor: function (data) </span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     print: function (...) </span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     rebucket: FALSE</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Private:</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     compute_residuals: function (prediction, labels) </span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     update_probs: function (orig_preds, model, x, mask = NULL, audit = FALSE, ...) </span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Fitted Multi-calibration model (5 iters)</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Correlations per iteration:</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    iter     Bucket_1    Bucket_2     Bucket_3</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1:    1 0.0002345878 0.001607495 0.0111570208</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2:    2 0.0003028562 0.001607421 0.0018036510</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3:    3 0.0004304191 0.001607421 0.0005702663</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4:    4 0.0005746641 0.002004285 0.0005702663</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5:    5 0.0007652389 0.002490407 0.0005702663</span></span></code></pre></div>
+</div>
+<div id="evaluation-on-test-data" class="section level3">
+<h3>1.3 Evaluation on Test Data</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>adult_test <span class="ot">=</span> <span class="fu">fread</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_test.csv&quot;</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>adult_test<span class="sc">$</span>Country <span class="ot">=</span> <span class="cn">NULL</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>adult_test<span class="sc">$</span>fnlwgt <span class="ot">=</span> <span class="cn">NULL</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># The first row seems to have an error</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>adult_test <span class="ot">=</span> adult_test[Target <span class="sc">!=</span> <span class="st">&quot;&quot;</span>,]</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>adult_test<span class="sc">$</span>Target <span class="ot">=</span> <span class="fu">droplevels</span>(adult_test<span class="sc">$</span>Target)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Note, that we have to convert columns from numeric to integer here:</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>sdc <span class="ot">=</span> train_tsk<span class="sc">$</span>feature_types[type <span class="sc">==</span> <span class="st">&quot;integer&quot;</span>, id]</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>adult_test[, (sdc) <span class="sc">:</span><span class="er">=</span> <span class="fu">lapply</span>(.SD, as.integer), .SDcols <span class="ot">=</span> sdc]</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>test_tsk <span class="ot">=</span> TaskClassif<span class="sc">$</span><span class="fu">new</span>(<span class="st">&quot;adult_test&quot;</span>, adult_test, <span class="at">target =</span> <span class="st">&quot;Target&quot;</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>prep_test <span class="ot">=</span> pipe<span class="sc">$</span><span class="fu">predict</span>(test_tsk)[[<span class="dv">1</span>]]</span></code></pre></div>
+<p>Now, we can again extract <code>X, y</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">=</span> prep_test<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> prep_test<span class="sc">$</span>feature_names)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>test_labels <span class="ot">=</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">one_hot</span>(prep_test<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> prep_test<span class="sc">$</span>target_names)[[<span class="dv">1</span>]])</span></code></pre></div>
+<p>and <strong>predict</strong>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>prs <span class="ot">=</span> mc<span class="sc">$</span><span class="fu">predict_probs</span>(test_data)</span></code></pre></div>
+<p>The accuracy of the multi-calibrated model</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">round</span>(prs) <span class="sc">==</span> test_labels)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.8396904</span></span></code></pre></div>
+<p>is similar to the non-calibrated model.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">round</span>(<span class="fu">init_predictor</span>(test_data)) <span class="sc">==</span> test_labels)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.8379706</span></span></code></pre></div>
+<p>But if we have a look at the bias for the different subpopulations of feature <code>Race</code>, we can see that the predictions got more calibrated. Note that we did not explicitly give neither the initial model nor the auditor access to the feature <code>Race</code>.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get bias per subgroup for multi-calibrated predictor</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>adult_test<span class="sc">$</span>biasmc <span class="ot">=</span> (prs <span class="sc">-</span> test_labels)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>adult_test[, .(<span class="fu">abs</span>(<span class="fu">mean</span>(biasmc)), .N), by <span class="ot">=</span> .(Race)]</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  Race          V1     N</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1:              Black 0.008414768  1561</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2:              White 0.053498900 13946</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3: Asian-Pac-Islander 0.064492304   480</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4:              Other 0.068950996   135</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5: Amer-Indian-Eskimo 0.002438774   159</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Get bias per subgroup for initial predictor</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>adult_test<span class="sc">$</span>biasinit <span class="ot">=</span> (<span class="fu">init_predictor</span>(test_data) <span class="sc">-</span> test_labels)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>adult_test[, .(<span class="fu">abs</span>(<span class="fu">mean</span>(biasinit)), .N), by <span class="ot">=</span> .(Race)]</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  Race          V1     N</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1:              Black 0.017961316  1561</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2:              White 0.066077755 13946</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3: Asian-Pac-Islander 0.074912961   480</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4:              Other 0.077236911   135</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5: Amer-Indian-Eskimo 0.009339302   159</span></span></code></pre></div>
+</div>
+<div id="the-auditor-effect" class="section level3">
+<h3>1.4 The Auditor Effect</h3>
+<p>We can also obtain the auditor effect after multicalibration. This indicates “how much” each observation has been affected by multi-calibration (on average across iterations).</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ae <span class="ot">=</span> mc<span class="sc">$</span><span class="fu">auditor_effect</span>(test_data)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(ae)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>We can see that there are a few instances with more pronounced effects, while most have actually only a low effect.</p>
+<p>In order to get more insights, we compute quantiles of the less and more effected population (median as cut-point) and analyze differences.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>effect <span class="ot">=</span> <span class="fu">apply</span>(test_data[ae <span class="sc">&gt;=</span> <span class="fu">median</span>(ae[ae<span class="sc">&gt;</span><span class="dv">0</span>]),], <span class="dv">2</span>, quantile)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>no_effect  <span class="ot">=</span> <span class="fu">apply</span>(test_data[ae <span class="sc">&lt;</span> <span class="fu">median</span>(ae[ae<span class="sc">&gt;</span><span class="dv">0</span>]),], <span class="dv">2</span>, quantile)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>difference <span class="ot">=</span> <span class="fu">apply</span>((effect<span class="sc">-</span>no_effect), <span class="dv">2</span>, mean)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>difference[difference <span class="sc">&gt;</span> <span class="fl">0.1</span>]</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       Education.Some.college Martial_Status.Never.married </span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                    0.2000000                    0.4000000 </span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Relationship.Not.in.family       Relationship.Own.child </span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                    0.2000000                    0.2000000 </span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                   Sex.Female   Occupation.Priv.house.serv </span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                    0.4000000                    0.1900148 </span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            Workclass.Private </span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                    0.1991271</span></span></code></pre></div>
+<p>There seems to be a difference in some variables like <code>Education</code> and <code>Marital_Status</code>.</p>
+<p>We can further analyze the individuals:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>test_data[ae <span class="sc">&gt;=</span> <span class="fu">median</span>(ae[ae<span class="sc">&gt;</span><span class="dv">0</span>]), <span class="fu">names</span>(<span class="fu">which</span>(difference <span class="sc">&gt;</span> <span class="fl">0.1</span>)), with <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       Education.Some.college Martial_Status.Never.married</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    1:                      0                            1</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    2:                      1                            1</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    3:                      0                            1</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    4:                      0                            1</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    5:                      1                            1</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ---                                                    </span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8137:                      0                            1</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8138:                      0                            0</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8139:                      0                            0</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8140:                      0                            0</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8141:                      0                            0</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       Relationship.Not.in.family Relationship.Own.child Sex.Female</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    1:                          0                      1          0</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    2:                          0                      1          1</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    3:                          1                      0          0</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    4:                          0                      0          0</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    5:                          0                      0          1</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ---                                                             </span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8137:                          0                      1          1</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8138:                          1                      0          0</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8139:                          1                      0          1</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8140:                          0                      0          0</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8141:                          0                      1          0</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       Occupation.Priv.house.serv Workclass.Private</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    1:                0.000000000        1.00000000</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    2:                0.030938947        0.02914113</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    3:                0.000000000        1.00000000</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    4:                0.004082771        0.98113465</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    5:                0.000000000        1.00000000</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ---                                             </span></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8137:                0.000000000        1.00000000</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8138:                0.000000000        0.00000000</span></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8139:                0.000000000        1.00000000</span></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8140:                0.037192541        0.95817537</span></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8141:                0.000000000        1.00000000</span></span></code></pre></div>
+</div>
+<div id="predicting-using-only-the-first-n-iterations" class="section level3">
+<h3>Predicting using only the first ‘n’ iterations</h3>
+<p>Multi-calibration is an iterative procedure. The <code>t</code> parameter can be used to predict using only the first <code>t</code> iterations. This then predicts using only the first <code>t</code> iterations of the multi-calibration procedure.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>prs <span class="ot">=</span> mc<span class="sc">$</span><span class="fu">predict_probs</span>(test_data, <span class="at">t =</span> 3L)</span></code></pre></div>
+</div>
+</div>
+<div id="example-2-mcboost-with-non-mlr3-models-glm" class="section level2">
+<h2>Example 2: MCBoost with non-mlr3 models: GLM</h2>
+<p><code>mcboost</code> does not require your model to be a <code>mlr3</code> model. As an input, <code>mcboost</code> expects a function <code>init_predictor</code> that takes as input <code>data</code> and returns a prediction.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>tsk <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> tsk<span class="sc">$</span><span class="fu">data</span>()[, Class <span class="sc">:</span><span class="er">=</span> <span class="fu">as.integer</span>(Class) <span class="sc">-</span> 1L]</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">=</span> <span class="fu">glm</span>(<span class="at">data =</span> data, <span class="at">formula =</span> Class <span class="sc">~</span> .)</span></code></pre></div>
+<p>The <code>init_predictor</code> could then use the <code>glm</code> model:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>init_predictor <span class="ot">=</span> <span class="cf">function</span>(data) {</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(mod, data)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>… and we can calibrate this predictor.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> data[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>l <span class="ot">=</span> data<span class="sc">$</span>Class</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">=</span> MCBoost<span class="sc">$</span><span class="fu">new</span>(<span class="at">init_predictor =</span> init_predictor)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">multicalibrate</span>(d[<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>,], l[<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>])</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">predict_probs</span>(d[<span class="dv">201</span><span class="sc">:</span><span class="dv">208</span>,])</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            1            2            3            4            5            6 </span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.0001870999 0.0178598234 0.4486733200 0.0001331085 0.1418422155 0.2885341699 </span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            7            8 </span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.2571026429 0.7356629651</span></span></code></pre></div>
+</div>
+<div id="example-3-avoiding-overfitting-in-mcboost" class="section level2">
+<h2>Example 3: Avoiding Overfitting in MCBoost</h2>
+<p>Very often <code>MCBoost</code>’s calibration is very aggressive and tends to overfit. This section tries to introduce a method to regularize against this overfitting.</p>
+<div id="cvlearner" class="section level3">
+<h3>3.1 CVLearner</h3>
+<p>In this section we use a <code>Cross-Validated</code> learner that predicts on held-out data during the training phase. This idea is based on Wolpert (1992)’s Stacked Generalization. Other, simpler methods include choosing a smaller step size <code>eta</code> or reducing the number of <code>iters</code>.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>tsk <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</span></code></pre></div>
+<p>As an <code>init_predictor</code> we again use a <code>ranger</code> model from mlr3 and construct an init predictor using the convenience function provided by <code>mcboost</code>.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;classif.ranger&quot;</span>, <span class="at">predict_type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>learner<span class="sc">$</span><span class="fu">train</span>(tsk)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>init_predictor <span class="ot">=</span> <span class="fu">mlr3_init_predictor</span>(learner)</span></code></pre></div>
+<p>… and we can calibrate this predictor. This time, we use a <code>CVTreeAuditorFitter</code> instead of a <code>TreeAuditorFitter</code>. This allows us to avoid overfitting similar to a technique coined <code>stacked generalization</code> first described by Wolpert in 1992. Note, that this can sometimes take a little longer since each learner is cross-validated using <code>3</code> folds (default).</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> data[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>l <span class="ot">=</span> data<span class="sc">$</span>Class</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">=</span> MCBoost<span class="sc">$</span><span class="fu">new</span>(<span class="at">init_predictor =</span> init_predictor, <span class="at">auditor_fitter=</span>CVTreeAuditorFitter<span class="sc">$</span><span class="fu">new</span>(), <span class="at">max_iter =</span> 2L)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">multicalibrate</span>(d[<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>,], l[<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>])</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:22.947] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 3/3) </span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:22.984] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 1/3) </span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.004] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 2/3) </span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.084] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 2/3) </span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.098] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 1/3) </span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.111] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 3/3) </span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.178] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 3/3) </span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.193] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 1/3) </span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.207] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 2/3) </span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.338] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 3/3) </span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.379] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 2/3) </span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.416] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 1/3) </span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.499] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 1/3) </span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.516] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 2/3) </span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.532] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 3/3) </span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.600] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 3/3) </span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.614] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 2/3) </span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:23.628] [mlr3]  Applying learner &#39;regr.rpart&#39; on task &#39;tmptsk&#39; (iter 1/3)</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">predict_probs</span>(d[<span class="dv">201</span><span class="sc">:</span><span class="dv">208</span>,])</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.6506734 0.6605665 0.6303917 0.6480143 0.6037770 0.6019906 0.5845569</span></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [8] 0.5364872</span></span></code></pre></div>
+</div>
+<div id="data-splitting" class="section level3">
+<h3>3.2 Data Splitting</h3>
+<p>We can also use a fresh chunk of the validation data in each iteration. <code>mcboost</code> implements two strategies, <code>&quot;bootstrap&quot;</code> and <code>&quot;split&quot;</code>. While <code>&quot;split&quot;</code> simply splits up the data, <code>&quot;bootstrap&quot;</code> draws a new bootstrap sample of the data in each iteration.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>tsk <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</span></code></pre></div>
+<p>Again, we use a <code>ranger</code> mlr3 model as our initial predictor:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;classif.ranger&quot;</span>, <span class="at">predict_type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>learner<span class="sc">$</span><span class="fu">train</span>(tsk)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>init_predictor <span class="ot">=</span> <span class="fu">mlr3_init_predictor</span>(learner)</span></code></pre></div>
+<p>and we can now calibrate:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> data[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>l <span class="ot">=</span> data<span class="sc">$</span>Class</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">=</span> MCBoost<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">init_predictor =</span> init_predictor,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">auditor_fitter=</span> TreeAuditorFitter<span class="sc">$</span><span class="fu">new</span>(),</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter_sampling =</span> <span class="st">&quot;bootstrap&quot;</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">multicalibrate</span>(d[<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>,], l[<span class="dv">1</span><span class="sc">:</span><span class="dv">200</span>])</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">predict_probs</span>(d[<span class="dv">201</span><span class="sc">:</span><span class="dv">208</span>,])</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.6458064 0.6708513 0.6471905 0.6676154 0.5803027 0.6248506 0.5799262</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [8] 0.5749539</span></span></code></pre></div>
+</div>
+</div>
+<div id="example-4-adjusting-the-subpop-fitter" class="section level2">
+<h2>Example 4: Adjusting the SubPop Fitter</h2>
+<p>For this example, we use the <em>sonar</em> dataset once again:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>tsk <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> tsk<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> tsk<span class="sc">$</span>feature_names)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>labels <span class="ot">=</span> tsk<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> tsk<span class="sc">$</span>target_names)[[<span class="dv">1</span>]]</span></code></pre></div>
+<div id="learnerauditorfitter" class="section level3">
+<h3>4.1 LearnerAuditorFitter</h3>
+<p>The Subpop-fitter can be easily adjusted by constructing it from a <code>LearnerAuditorFitter</code>. This allows for using any <strong>mlr3</strong> learner. See <a href="https://mlr3extralearners.mlr-org.com/articles/learners/list_learners.html">here</a> for a list of available learners.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">=</span> LearnerAuditorFitter<span class="sc">$</span><span class="fu">new</span>(<span class="fu">lrn</span>(<span class="st">&quot;regr.rpart&quot;</span>, <span class="at">minsplit =</span> 10L))</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">=</span> MCBoost<span class="sc">$</span><span class="fu">new</span>(<span class="at">auditor_fitter =</span> rf)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">multicalibrate</span>(data, labels)</span></code></pre></div>
+<p>The <code>TreeAuditorFitter</code> and <code>RidgeAuditorFitter</code> are two instantiations of this Fitter with pre-defined learners. By providing their character strings the fitter could be automatically constructed.</p>
+</div>
+<div id="subpopauditorfitter-subgroupauditorfitter" class="section level3">
+<h3>4.2 SubpopAuditorFitter &amp; SubgroupAuditorFitter</h3>
+<p>In some occasions, instead of using a <code>Learner</code>, we might want to use a fixed set of subgroups. Those can either be defined from the data itself or provided from the outside.</p>
+<p><strong>Splitting via the dataset</strong></p>
+<p>In order to split the data into groups according to a set of columns, we use a <code>SubpopAuditorFitter</code> together with a list of <code>subpops</code>. Those define the group splits to multi-calibrate on. These splits can be either a <code>character</code> string, referencing a binary variable in the data or a <code>function</code> that, when evaluated on the data, returns a binary vector.</p>
+<p>In order to showcase both options, we add a binary variable to our <code>data</code>:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>data[, Bin <span class="sc">:</span><span class="er">=</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="fu">nrow</span>(data), <span class="at">replace =</span> <span class="cn">TRUE</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">=</span> SubpopAuditorFitter<span class="sc">$</span><span class="fu">new</span>(<span class="fu">list</span>(</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Bin&quot;</span>,</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(data) {data[[<span class="st">&quot;V1&quot;</span>]] <span class="sc">&gt;</span> <span class="fl">0.2</span>},</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(data) {data[[<span class="st">&quot;V1&quot;</span>]] <span class="sc">&gt;</span> <span class="fl">0.2</span> <span class="sc">|</span> data[[<span class="st">&quot;V3&quot;</span>]] <span class="sc">&lt;</span> <span class="fl">0.29</span>}</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">=</span> MCBoost<span class="sc">$</span><span class="fu">new</span>(<span class="at">auditor_fitter =</span> rf)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">multicalibrate</span>(data, labels)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in .__MCBoost__multicalibrate(self = self, private = private, super =</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; super, : The model is already calibrated wrt. the provided residual fitter and</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; alpha!</span></span></code></pre></div>
+<p>And we can again apply it to predict on new data:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">predict_probs</span>(data)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in .__MCBoost__predict_probs(self = self, private = private, super =</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; super, : multicalibrate was not run! Returning original predictions!</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   [1] 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [19] 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [37] 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [55] 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [73] 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [91] 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [109] 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [127] 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [145] 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [163] 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [181] 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [199] 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5</span></span></code></pre></div>
+<p><strong>Manually defined masks</strong></p>
+<p>If we want to add the splitting from the outside, by supplying binary masks for the rows of the data, we can provide manually defined masks. Note, that the masks have to correspond with the number of rows in the dataset.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">=</span> SubgroupAuditorFitter<span class="sc">$</span><span class="fu">new</span>(<span class="fu">list</span>(</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dv">104</span>),</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">52</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">=</span> MCBoost<span class="sc">$</span><span class="fu">new</span>(<span class="at">auditor_fitter =</span> rf)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">multicalibrate</span>(data, labels)</span></code></pre></div>
+<p>During prediction, we now have to supply a set of masks for the prediction data.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>predict_masks <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dv">52</span>),</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">26</span>)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">predict_probs</span>(data[<span class="dv">1</span><span class="sc">:</span><span class="dv">104</span>,], <span class="at">subgroup_masks =</span> predict_masks)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   [1] 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   [8] 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [15] 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [22] 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [29] 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [36] 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [43] 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [50] 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [57] 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [64] 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895</span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [71] 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [78] 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758</span></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [85] 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895</span></span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [92] 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758 0.5244895 0.5244895</span></span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [99] 0.5244895 0.5303758 0.5244895 0.5244895 0.5244895 0.5303758</span></span></code></pre></div>
+</div>
+</div>
+<div id="example-5-multi-calibrating-data-with-missing-values-using-a-pipeline" class="section level2">
+<h2>Example 5: Multi-Calibrating data with missing values using a pipeline</h2>
+<p>When data has missing values or other non-standard columns, we often have to pre-process data in order to be able to fit models. Those preprocessing steps can be embedded into the <code>SubPopFitter</code> by using a <strong>mlr3pipelines</strong> Pipeline. The following code shows a brief example:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>tsk <span class="ot">=</span> <span class="fu">tsk</span>(<span class="st">&quot;penguins&quot;</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co"># first we convert to a binary task</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>row_ids <span class="ot">=</span> tsk<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">&quot;species&quot;</span>, <span class="st">&quot;..row_id&quot;</span>))[species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Adelie&quot;</span>, <span class="st">&quot;Gentoo&quot;</span>)][[<span class="st">&quot;..row_id&quot;</span>]]</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>tsk<span class="sc">$</span><span class="fu">filter</span>(row_ids)<span class="sc">$</span><span class="fu">droplevels</span>()</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>tsk</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;TaskClassif:penguins&gt; (276 x 8)</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * Target: species</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * Properties: twoclass</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * Features (7):</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - int (3): body_mass, flipper_length, year</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - dbl (2): bill_depth, bill_length</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - fct (2): island, sex</span></span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;mlr3pipelines&quot;</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;mlr3learners&quot;</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert task to X,y</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> tsk<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> tsk<span class="sc">$</span>feature_names)</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> tsk<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> tsk<span class="sc">$</span>target_names)</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Our inital model is a pipeline that imputes missings and encodes categoricals</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>init_model <span class="ot">=</span> <span class="fu">as_learner</span>(<span class="fu">po</span>(<span class="st">&quot;encode&quot;</span>) <span class="sc">%&gt;&gt;%</span> <span class="fu">po</span>(<span class="st">&quot;imputehist&quot;</span>) <span class="sc">%&gt;&gt;%</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lrn</span>(<span class="st">&quot;classif.glmnet&quot;</span>, <span class="at">predict_type =</span> <span class="st">&quot;prob&quot;</span>))</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a><span class="co"># And we fit it on a subset of the data in order to simulate a poorly performing model.</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>init_model<span class="sc">$</span><span class="fu">train</span>(tsk<span class="sc">$</span><span class="fu">clone</span>()<span class="sc">$</span><span class="fu">filter</span>(row_ids[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, <span class="dv">160</span><span class="sc">:</span><span class="dv">170</span>)]))</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>init_model<span class="sc">$</span><span class="fu">predict</span>(tsk)<span class="sc">$</span><span class="fu">score</span>()</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; classif.ce </span></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.1594203</span></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a><span class="co"># We define a pipeline that imputes missings and encodes categoricals</span></span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>auditor <span class="ot">=</span> <span class="fu">as_learner</span>(<span class="fu">po</span>(<span class="st">&quot;encode&quot;</span>) <span class="sc">%&gt;&gt;%</span> <span class="fu">po</span>(<span class="st">&quot;imputehist&quot;</span>) <span class="sc">%&gt;&gt;%</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.rpart&quot;</span>))</span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">=</span> MCBoost<span class="sc">$</span><span class="fu">new</span>(<span class="at">auditor_fitter =</span> auditor, <span class="at">init_predictor =</span> init_model)</span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">multicalibrate</span>(X, y)</span></code></pre></div>
+<p>and we can observe where it improved:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>mc</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;MCBoost&gt;</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Public:</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     alpha: 1e-04</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     auditor_effect: function (x, aggregate = TRUE, t = Inf, predictor_args = NULL, </span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     auditor_effects: list</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     auditor_fitter: LearnerAuditorFitter, AuditorFitter, R6</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     bucket_strategy: simple</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     clone: function (deep = FALSE) </span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     eta: 1</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     initialize: function (max_iter = 5, alpha = 1e-04, eta = 1, partition = TRUE, </span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     iter_corr: list</span></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     iter_models: list</span></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     iter_partitions: list</span></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     iter_sampling: none</span></span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     max_iter: 5</span></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     multicalibrate: function (data, labels, predictor_args = NULL, ...) </span></span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     multiplicative: TRUE</span></span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     num_buckets: 2</span></span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     partition: TRUE</span></span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     predict_probs: function (x, t = Inf, predictor_args = NULL, audit = FALSE, ...) </span></span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     predictor: function (data, ...) </span></span>
+<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     print: function (...) </span></span>
+<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     rebucket: FALSE</span></span>
+<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Private:</span></span>
+<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     compute_residuals: function (prediction, labels) </span></span>
+<span id="cb43-27"><a href="#cb43-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     update_probs: function (orig_preds, model, x, mask = NULL, audit = FALSE, ...) </span></span>
+<span id="cb43-28"><a href="#cb43-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Fitted Multi-calibration model (5 iters)</span></span>
+<span id="cb43-29"><a href="#cb43-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Correlations per iteration:</span></span>
+<span id="cb43-30"><a href="#cb43-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    iter   Bucket_1  Bucket_2 Bucket_3</span></span>
+<span id="cb43-31"><a href="#cb43-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1:    1 0.15308560 0.2487837        0</span></span>
+<span id="cb43-32"><a href="#cb43-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2:    2 0.14699794 0.2414251        0</span></span>
+<span id="cb43-33"><a href="#cb43-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3:    3 0.13422070 0.2204713        0</span></span>
+<span id="cb43-34"><a href="#cb43-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4:    4 0.11225541 0.1844612        0</span></span>
+<span id="cb43-35"><a href="#cb43-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5:    5 0.06501729 0.1092000        0</span></span></code></pre></div>
+</div>
+<div id="example-6-multi-calibration-regression" class="section level2">
+<h2>Example 6: Multi-Calibration Regression</h2>
+<p>We abuse the <code>Communities &amp; Crime</code> dataset in order to showcase how <code>mcboost</code> can be used in a regression setting.</p>
+<p>First we download the data and create an <code>mlr3</code> regression task:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3oml)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>oml <span class="ot">=</span> OMLData<span class="sc">$</span><span class="fu">new</span>(<span class="dv">42730</span>)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> oml<span class="sc">$</span>data</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:28.409] Retrieving JSON {url: https://www.openml.org/api/v1/json/data/42730, authenticated: FALSE}</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; INFO  [10:37:28.566] Retrieving ARFF {url: https://www.openml.org/data/v1/download/22044764/us_crime.arff, authenticated: FALSE}</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>tsk <span class="ot">=</span> TaskRegr<span class="sc">$</span><span class="fu">new</span>(<span class="st">&quot;communities_crime&quot;</span>, data, <span class="at">target =</span> <span class="st">&quot;ViolentCrimesPerPop&quot;</span>)</span></code></pre></div>
+<p>Currently, <strong>mcboost</strong> only allows to work with targets between 0 and 1. Luckily, our target variable’s values are already in that range, but if they were not, we could simply scale them to [0;1] before our analysis.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data<span class="sc">$</span>ViolentCrimesPerPop)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   0.000   0.070   0.150   0.238   0.330   1.000</span></span></code></pre></div>
+<p>We again split our task into <strong>train</strong> and <strong>test</strong>. We do this in <code>mlr3</code> by simply setting some (here 500) row roles to <code>&quot;validation&quot;</code>.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>tsk<span class="sc">$</span><span class="fu">set_row_roles</span>(<span class="fu">sample</span>(tsk<span class="sc">$</span>row_roles<span class="sc">$</span>use, <span class="dv">500</span>), <span class="st">&quot;validation&quot;</span>)</span></code></pre></div>
+<div id="preprocessing-1" class="section level3">
+<h3>6.1 Preprocessing</h3>
+<p>Then we do basic preprocessing, since we do not have any categorical variables, we only impute NA’s using a histogram approach.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3pipelines)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>pipe <span class="ot">=</span>  <span class="fu">po</span>(<span class="st">&quot;imputehist&quot;</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>prep_task <span class="ot">=</span> pipe<span class="sc">$</span><span class="fu">train</span>(<span class="fu">list</span>(tsk))[[<span class="dv">1</span>]]</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>prep_task<span class="sc">$</span><span class="fu">set_col_roles</span>(<span class="fu">c</span>(<span class="st">&quot;racepctblack&quot;</span>, <span class="st">&quot;racePctWhite&quot;</span>, <span class="st">&quot;racePctAsian&quot;</span>, <span class="st">&quot;racePctHisp&quot;</span>, <span class="st">&quot;community&quot;</span>), <span class="at">remove_from =</span> <span class="st">&quot;feature&quot;</span>)</span></code></pre></div>
+<p>Now we fit our first <code>Learner</code>: A <code>random forest</code>.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>l <span class="ot">=</span> <span class="fu">lrn</span>(<span class="st">&quot;regr.ranger&quot;</span>, <span class="at">num.trees =</span> 10L)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>l<span class="sc">$</span><span class="fu">train</span>(prep_task)</span></code></pre></div>
+</div>
+<div id="mcboost-1" class="section level3">
+<h3>6.2 MCBoost</h3>
+<p>A simple way to use the predictions from any <code>Model</code> in <strong>mcboost</strong> is to wrap the predict function and provide it as an initial predictor. This can be done from any model / any library. Note, that we have to make sure, that our <code>init_predictor</code> returns a numeric vector of predictions.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>init_predictor <span class="ot">=</span> <span class="cf">function</span>(data) {</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  l<span class="sc">$</span><span class="fu">predict_newdata</span>(data)<span class="sc">$</span>response</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>As <strong>mcboost</strong> requires the data to be provided in <code>X, y</code> format (a <code>data.table</code> or <code>data.frame</code> of features and a vector of labels), we create those two objects.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> prep_task<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> prep_task<span class="sc">$</span>feature_names)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>labels <span class="ot">=</span> prep_task<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> prep_task<span class="sc">$</span>target_names)[[<span class="dv">1</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">=</span> MCBoost<span class="sc">$</span><span class="fu">new</span>(<span class="at">auditor_fitter =</span> <span class="st">&quot;RidgeAuditorFitter&quot;</span>, <span class="at">init_predictor =</span> init_predictor, <span class="at">eta =</span> <span class="fl">0.1</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>mc<span class="sc">$</span><span class="fu">multicalibrate</span>(data, labels)</span></code></pre></div>
+</div>
+<div id="evaluation-on-test-data-1" class="section level3">
+<h3>6.3 Evaluation on Test Data</h3>
+<p>We first create the test task by setting the <code>validation</code> rows to <code>use</code>, and then use our preprocessing <code>pipe&#39;s</code> predict function to also impute missing values for the validation data. Then we again extract features <code>X</code> and target <code>y</code>.</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>test_task <span class="ot">=</span> tsk<span class="sc">$</span><span class="fu">clone</span>()</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>test_task<span class="sc">$</span>row_roles<span class="sc">$</span>use <span class="ot">=</span> test_task<span class="sc">$</span>row_roles<span class="sc">$</span>validation</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>test_task <span class="ot">=</span> pipe<span class="sc">$</span><span class="fu">predict</span>(<span class="fu">list</span>(test_task))[[<span class="dv">1</span>]]</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">=</span> test_task<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> tsk<span class="sc">$</span>feature_names)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>test_labels <span class="ot">=</span> test_task<span class="sc">$</span><span class="fu">data</span>(<span class="at">cols =</span> tsk<span class="sc">$</span>target_names)[[<span class="dv">1</span>]]</span></code></pre></div>
+<p>and <strong>predict</strong>.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>prs <span class="ot">=</span> mc<span class="sc">$</span><span class="fu">predict_probs</span>(test_data)</span></code></pre></div>
+<p>Now we can compute the MSE of the multi-calibrated model</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((prs <span class="sc">-</span> test_labels)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.01909034</span></span></code></pre></div>
+<p>and compare to the non-calibrated version:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((<span class="fu">init_predictor</span>(test_data) <span class="sc">-</span> test_labels)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.01880431</span></span></code></pre></div>
+<p>But looking at sub-populations we can see that the predictions got more calibrated. Since we cannot show all subpopulations we only show the MSE for the feature <code>racepctblack</code>.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>test_data<span class="sc">$</span>se_mcboost <span class="ot">=</span> (prs <span class="sc">-</span> test_labels)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>test_data<span class="sc">$</span>se_init <span class="ot">=</span> (<span class="fu">init_predictor</span>(test_data) <span class="sc">-</span> test_labels)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>test_data[, .(<span class="at">mcboost =</span> <span class="fu">mean</span>(se_mcboost), <span class="at">initial =</span> <span class="fu">mean</span>(se_init), .N), by <span class="ot">=</span> .(racepctblack <span class="sc">&gt;</span> <span class="fl">0.5</span>)]</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    racepctblack    mcboost    initial   N</span></span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1:        FALSE 0.01530715 0.01522334 447</span></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2:         TRUE 0.05099764 0.04900611  53</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
