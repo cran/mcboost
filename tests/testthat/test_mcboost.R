@@ -10,6 +10,7 @@ test_that("MCBoost class instantiation", {
 
 
 test_that("MCBoost multicalibrate and predict_probs - ConstantPredictor", {
+  skip_on_cran()
   # Sonar task
   tsk = tsk("sonar")
   data = tsk$data(cols = tsk$feature_names)
@@ -27,6 +28,7 @@ test_that("MCBoost multicalibrate and predict_probs - ConstantPredictor", {
 
 
 test_that("MCBoost multicalibrate and predict_probs - init_predictor function", {
+  skip_on_cran()
   # Sonar task
   tsk = tsk("sonar")
   d = tsk$data(cols = tsk$feature_names)
@@ -63,6 +65,7 @@ test_that("MCBoost multicalibrate and predict_probs - init_predictor function", 
 
 
 test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredictor - response", {
+  skip_on_cran()
   # Sonar task
   tsk = tsk("sonar")
   data = as.matrix(tsk$data(cols = tsk$feature_names))
@@ -83,6 +86,7 @@ test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredic
 
 
 test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredictor - prob", {
+  skip_on_cran()
   # Breast Cancer task
   tsk = tsk("breast_cancer")
   data = tsk$data(cols = tsk$feature_names)
@@ -103,6 +107,8 @@ test_that("MCBoost multicalibrate and predict_probs - Init trained LearnerPredic
 
 
 test_that("MCBoost multicalibrate with subpops", {
+  skip_on_os("solaris")
+  skip_on_cran()
   # Sonar task
   tsk = tsk("sonar")
   data = tsk$data(cols = tsk$feature_names)
@@ -112,22 +118,24 @@ test_that("MCBoost multicalibrate with subpops", {
   data[, AGE_LE := sample(c(0,1), nrow(data), TRUE)]
   data[, G_1 := c(rep(0, 100), rep(1, 108))]
   data[, G_2 := c(rep(1, 50), rep(0, 158))]
-  subpops = list("AGE_LE", "G_1", "G_2", function(x) x[["V1"]] > 0.22)
+  subpops = list("AGE_LE", "G_1", "G_2", function(x) x[["V1"]] > quantile(data$V1,.9))
 
   # Fit  initial model
-  lp = LearnerPredictor$new(lrn("classif.rpart"))
+  lp = LearnerPredictor$new(lrn("classif.rpart", maxdepth = 1L, predict_type = "prob"))
   lp$fit(data, labels)
 
   mc = MCBoost$new(default_model_class = lp, subpops = subpops, alpha = 0)
   mc$multicalibrate(data, labels)
+  expect_is(mc$auditor_fitter, "SubpopAuditorFitter")
   expect_list(mc$iter_models, types = "SubpopPredictor", len = mc$max_iter)
   expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)
-
-  assert_numeric(mc$predict_probs(data), lower = 0, upper = 1, len = nrow(data))
+  expect_numeric(mc$predict_probs(data), lower = 0, upper = 1, len = nrow(data))
 })
 
 
 test_that("MCBoost multicalibrate with Subgroups", {
+  skip_on_cran()
+  skip_on_os("solaris")
   # Sonar task
   tsk = tsk("sonar")
   data = tsk$data(cols = tsk$feature_names)
@@ -153,6 +161,8 @@ test_that("MCBoost multicalibrate with Subgroups", {
 })
 
 test_that("MCBoost various settings", {
+  skip_on_cran()
+  skip_on_os("solaris")
   # Sonar task
   tsk = tsk("sonar")
   data = tsk$data(cols = tsk$feature_names)
@@ -165,7 +175,9 @@ test_that("MCBoost various settings", {
   # Check a list of settings
   mcs = list(
      MCBoost$new(auditor_fitter = NULL),
-     MCBoost$new(alpha = 0.05)
+     MCBoost$new(alpha = 0.05),
+     MCBoost$new(eval_fulldata = TRUE),
+     MCBoost$new(eval_fulldata = TRUE, multiplicative = FALSE)
   )
   for (mc in mcs) {
     mc$multicalibrate(data, labels)
@@ -189,6 +201,7 @@ test_that("MCBoost various settings", {
 
 
 test_that("MCBoost Edge Cases", {
+  skip_on_cran()
   # Sonar task
   tsk = tsk("sonar")
   d = tsk$data(cols = tsk$feature_names, rows = c(1:10, 200:208))
@@ -218,6 +231,7 @@ test_that("MCBoost Edge Cases", {
 })
 
 test_that("MCBoost args for self-defined init predictor", {
+  skip_on_os("solaris")
   # Sonar task
   tsk = tsk("sonar")
   data = tsk$data(cols = tsk$feature_names)
@@ -234,6 +248,7 @@ test_that("MCBoost args for self-defined init predictor", {
 })
 
 test_that("MCBoost multicalibrate and predict_probs - init_predictor function", {
+  skip_on_cran()
   # Sonar task
   tsk = tsk("sonar")
   d = tsk$data(cols = tsk$feature_names)
@@ -262,6 +277,7 @@ test_that("MCBoost multicalibrate and predict_probs - init_predictor function", 
 
 
 test_that("MCBoost throws error for multi level outcomes", {
+  skip_on_cran()
   tsk = tsk("iris")
   d = tsk$data(cols = tsk$feature_names)
   l = tsk$data(cols = tsk$target_names)
@@ -271,12 +287,13 @@ test_that("MCBoost throws error for multi level outcomes", {
 })
 
 test_that("MCBoost throws error if wrong auditor_fitter", {
+  skip_on_cran()
   expect_error(MCBoost$new(auditor_fitter = "Ts"), "'Ts' not found")
   expect_error(MCBoost$new(auditor_fitter = 1234), "auditor_fitter must be of type 'AuditorFitter' or character")
 })
 
 test_that("init predictor wrapper works", {
-
+  skip_on_cran()
   # sonar task
   tsk = tsk("sonar")
   d = tsk$data(cols = tsk$feature_names, rows = c(1:10, 200:208))
@@ -309,4 +326,58 @@ test_that("init predictor wrapper works", {
 
   expect_warning(mc$predict_probs(d),  "multicalibrate was not run!")
 
+})
+
+test_that("mcboost on training data sanity checks", {
+  skip_on_os("solaris")
+  skip_on_cran()
+  tsk = tsk("sonar")
+  d = tsk$data(cols = tsk$feature_names)
+  l = tsk$data(cols = tsk$target_names)[[1]]
+  mc = MCBoost$new(auditor_fitter = "TreeAuditorFitter")
+  mc$multicalibrate(d[1:200,], l[1:200])
+  df = do.call("rbind", mc$iter_corr)
+  expect_true(all(diff(df) <= 0))
+
+  mc = MCBoost$new(auditor_fitter = "TreeAuditorFitter", multiplicative = FALSE)
+  mc$multicalibrate(d[1:200,], l[1:200])
+  df = do.call("rbind", mc$iter_corr)
+  expect_true(all(diff(df) <= 0))
+
+  mc = MCBoost$new(auditor_fitter = "RidgeAuditorFitter", partition = TRUE, num_buckets = 5)
+  mc$multicalibrate(d[1:200,], l[1:200])
+  df = do.call("rbind", mc$iter_corr)
+  expect_true(all(diff(df) <= 0))
+
+  mc = MCBoost$new(auditor_fitter = "RidgeAuditorFitter", partition = TRUE, num_buckets = 5, multiplicative = FALSE)
+  mc$multicalibrate(d[1:200,], l[1:200])
+  df = do.call("rbind", mc$iter_corr)
+  expect_true(all(diff(df) <= 0))
+})
+
+test_that("Perfect predictors", {
+  skip_on_os("solaris")
+  skip_on_cran()
+  # Sonar task
+  tsk = tsk("sonar")
+  data = tsk$data(cols = tsk$feature_names)
+  labels = tsk$data(cols = tsk$target_names)[[1]]
+
+  # Add group indicators for subpops
+  data[, AGE_LE := sample(c(0,1), nrow(data), TRUE)]
+  data[, G_1 := c(rep(0, 100), rep(1, 108))]
+  data[, G_2 := c(rep(1, 50), rep(0, 158))]
+  subpops = list("AGE_LE", "G_1", "G_2", function(x) x[["V1"]] > quantile(data$V1,.9))
+
+  # Fit  initial model
+  lp = LearnerPredictor$new(lrn("classif.rpart"))
+  lp$fit(data, labels)
+
+  mc = MCBoost$new(default_model_class = lp, subpops = subpops, alpha = 0)
+  mc$multicalibrate(data, labels)
+  expect_is(mc$auditor_fitter, "SubpopAuditorFitter")
+  expect_list(mc$iter_models, types = "SubpopPredictor", len = mc$max_iter)
+  expect_list(mc$iter_partitions, types = "ProbRange", len = mc$max_iter)
+  expect_numeric(mc$predict_probs(data), lower = 0, upper = 1, len = nrow(data))
+  expect_true(all(map_lgl(1:3, function(i) all(diff(map_dbl(mc$iter_corr, i)) >= 0))))
 })

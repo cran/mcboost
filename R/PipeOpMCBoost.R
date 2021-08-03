@@ -39,9 +39,10 @@
 #' Only methods inherited from [`mlr3pipelines::PipeOp`].
 #'
 #' @examples
+#' \dontrun{
 #' library(mlr3)
 #' library(mlr3pipelines)
-#' # Attention: gunion inputs have to be in the correct order for now.
+#' # Attention: gunion inputs have to be in the correct order for now
 #'  gr = gunion(list(
 #'    "data" = po("nop"),
 #'    "prediction" = po("learner_cv", lrn("classif.rpart"))
@@ -51,6 +52,7 @@
 #' tid = sample(1:208, 108)
 #' gr$train(tsk$clone()$filter(tid))
 #' gr$predict(tsk$clone()$filter(setdiff(1:208, tid)))
+#' }
 #' @family PipeOps
 #' @seealso https://mlr3book.mlr-org.com/list-pipeops.html
 #' @export
@@ -153,8 +155,10 @@ PipeOpMCBoost = R6Class("PipeOpMCBoost",
 #'   Note: An initial predictor can also be supplied via the `init_predictor` parameter.
 #' @return (mlr3pipelines) [`Graph`]
 #' @examples
+#'   \dontrun{
 #'   library("mlr3pipelines")
 #'   gr = ppl_mcboost()
+#'   }
 #' @export
 ppl_mcboost = function(learner = lrn("classif.featureless")) {
   mlr3misc::require_namespaces("mlr3pipelines")

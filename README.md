@@ -3,6 +3,7 @@
 <!-- badges: start -->
 [![tic](https://github.com/mlr-org/mcboost/workflows/tic/badge.svg?branch=main)](https://github.com/mlr-org/mcboost/actions)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN Status](https://www.r-pkg.org/badges/version-ago/mcboost)](https://cran.r-project.org/package=mcboost)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Mattermost](https://img.shields.io/badge/chat-mattermost-orange.svg)](https://lmmisld-lmu-stats-slds.srv.mwn.de/mlr_invite/)
 <!-- badges: end -->
@@ -17,9 +18,15 @@ More details with respect to usage and the procedures can be found in the packag
 
 ## Installation
 
-You can install the released version of mcboost from **Github** with:
+The current version can be downloaded from CRAN using:
 
-``` r
+```r
+install.packages("mcboost")
+```
+
+You can install the development version of mcboost from **Github** with:
+
+```r
 remotes::install_github("mlr-org/mcboost")
 ```
 
