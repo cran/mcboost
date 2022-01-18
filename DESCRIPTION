@@ -1,7 +1,7 @@
 Package: mcboost
 Type: Package
 Title: Multi-Calibration Boosting
-Version: 0.3.3.0
+Version: 0.4.0
 Authors@R: 
     c(person(given = "Florian",
              family = "Pfisterer",
@@ -18,6 +18,9 @@ Authors@R:
              role = "ctb",
              email = "c.kern@uni-mannheim.de",
              comment = c(ORCID = "0000-0001-7363-4299")),
+      person(given = "Carolin", 
+             family = "Becker",
+             role = "ctb"),
       person(given = "Bernd",
              family = "Bischl",
              role = "ctb",
@@ -36,18 +39,23 @@ BugReports: https://github.com/mlr-org/mcboost/issues
 Encoding: UTF-8
 Depends: R (>= 3.1.0)
 Imports: backports, checkmate (>= 2.0.0), data.table (>= 1.13.6), mlr3
-        (>= 0.10), mlr3misc (>= 0.8.0), mlr3pipelines (>= 0.3.0), R6
-        (>= 2.4.1), rpart, glmnet
-Suggests: curl, formattable, tidyverse, PracTools, mlr3learners,
+        (>= 0.10), mlr3misc (>= 0.8.0), mlr3pipelines (>= 0.3.0),
+        mlr3proba (>= 0.4.0), R6 (>= 2.4.1), rpart, glmnet
+Suggests: curl, lgr, formattable, tidyverse, PracTools, mlr3learners,
         mlr3oml, neuralnet, paradox, testthat, knitr, ranger,
-        rmarkdown, covr
-RoxygenNote: 7.1.1
+        rmarkdown, survival, xgboost, covr
+RoxygenNote: 7.1.2
 VignetteBuilder: knitr
+Collate: 'AuditorFitters.R' 'MCBoost.R' 'MCBoostSurv.R'
+        'PipelineMCBoost.R' 'PipeOpLearnerPred.R' 'PipeOpMCBoost.R'
+        'PipeOpMCBoostSurv.R' 'Predictor.R' 'ProbRange.R'
+        'ProbRange2D.R' 'helpers.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2021-07-31 07:25:28 UTC; flo
+Packaged: 2022-01-18 16:37:28 UTC; flo
 Author: Florian Pfisterer [cre, aut] (<https://orcid.org/0000-0001-8867-762X>),
   Susanne Dandl [ctb] (<https://orcid.org/0000-0003-4324-4163>),
   Christoph Kern [ctb] (<https://orcid.org/0000-0001-7363-4299>),
+  Carolin Becker [ctb],
   Bernd Bischl [ctb] (<https://orcid.org/0000-0001-6002-6980>)
 Repository: CRAN
-Date/Publication: 2021-08-03 09:50:02 UTC
+Date/Publication: 2022-01-18 17:52:43 UTC
