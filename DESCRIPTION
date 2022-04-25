@@ -1,7 +1,7 @@
 Package: mcboost
 Type: Package
 Title: Multi-Calibration Boosting
-Version: 0.4.0
+Version: 0.4.1
 Authors@R: 
     c(person(given = "Florian",
              family = "Pfisterer",
@@ -51,11 +51,11 @@ Collate: 'AuditorFitters.R' 'MCBoost.R' 'MCBoostSurv.R'
         'PipeOpMCBoostSurv.R' 'Predictor.R' 'ProbRange.R'
         'ProbRange2D.R' 'helpers.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2022-01-18 16:37:28 UTC; flo
+Packaged: 2022-04-25 12:28:44 UTC; flo
 Author: Florian Pfisterer [cre, aut] (<https://orcid.org/0000-0001-8867-762X>),
   Susanne Dandl [ctb] (<https://orcid.org/0000-0003-4324-4163>),
   Christoph Kern [ctb] (<https://orcid.org/0000-0001-7363-4299>),
   Carolin Becker [ctb],
   Bernd Bischl [ctb] (<https://orcid.org/0000-0001-6002-6980>)
 Repository: CRAN
-Date/Publication: 2022-01-18 17:52:43 UTC
+Date/Publication: 2022-04-25 13:10:02 UTC

@@ -25,6 +25,7 @@
     </style>
 
 
+
 <style type="text/css">
   code {
     white-space: pre;
@@ -594,8 +595,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb44-6" title="6">tsk =<span class="st"> </span>TaskRegr<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;communities_crime&quot;</span>, data, <span class="dt">target =</span> <span class="st">&quot;ViolentCrimesPerPop&quot;</span>)</a></code></pre></div>
 <p>Currently, <strong>mcboost</strong> only allows to work with targets between 0 and 1. Luckily, our target variable’s values are already in that range, but if they were not, we could simply scale them to [0;1] before our analysis.</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="kw">summary</span>(data<span class="op">$</span>ViolentCrimesPerPop)</a></code></pre></div>
-<p>We again split our task into <strong>train</strong> and <strong>test</strong>. We do this in <code>mlr3</code> by simply setting some (here 500) row roles to <code>&quot;validation&quot;</code>.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">tsk<span class="op">$</span><span class="kw">set_row_roles</span>(<span class="kw">sample</span>(tsk<span class="op">$</span>row_roles<span class="op">$</span>use, <span class="dv">500</span>), <span class="st">&quot;validation&quot;</span>)</a></code></pre></div>
+<p>We again split our task into <strong>train</strong> and <strong>test</strong>. We do this in <code>mlr3</code> by simply setting some (here 500) row roles to <code>&quot;holdout&quot;</code>.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">tsk<span class="op">$</span><span class="kw">set_row_roles</span>(<span class="kw">sample</span>(tsk<span class="op">$</span>row_roles<span class="op">$</span>use, <span class="dv">500</span>), <span class="st">&quot;holdout&quot;</span>)</a></code></pre></div>
 <div id="preprocessing-1" class="section level3">
 <h3>6.1 Preprocessing</h3>
 <p>Then we do basic preprocessing, since we do not have any categorical variables, we only impute NA’s using a histogram approach.</p>
@@ -623,9 +624,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="evaluation-on-test-data-1" class="section level3">
 <h3>6.3 Evaluation on Test Data</h3>
-<p>We first create the test task by setting the <code>validation</code> rows to <code>use</code>, and then use our preprocessing <code>pipe&#39;s</code> predict function to also impute missing values for the validation data. Then we again extract features <code>X</code> and target <code>y</code>.</p>
+<p>We first create the test task by setting the <code>holdout</code> rows to <code>use</code>, and then use our preprocessing <code>pipe&#39;s</code> predict function to also impute missing values for the validation data. Then we again extract features <code>X</code> and target <code>y</code>.</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1">test_task =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">clone</span>()</a>
-<a class="sourceLine" id="cb52-2" title="2">test_task<span class="op">$</span>row_roles<span class="op">$</span>use =<span class="st"> </span>test_task<span class="op">$</span>row_roles<span class="op">$</span>validation</a>
+<a class="sourceLine" id="cb52-2" title="2">test_task<span class="op">$</span>row_roles<span class="op">$</span>use =<span class="st"> </span>test_task<span class="op">$</span>row_roles<span class="op">$</span>holdout</a>
 <a class="sourceLine" id="cb52-3" title="3">test_task =<span class="st"> </span>pipe<span class="op">$</span><span class="kw">predict</span>(<span class="kw">list</span>(test_task))[[<span class="dv">1</span>]]</a>
 <a class="sourceLine" id="cb52-4" title="4">test_data =<span class="st"> </span>test_task<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>feature_names)</a>
 <a class="sourceLine" id="cb52-5" title="5">test_labels =<span class="st"> </span>test_task<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>target_names)[[<span class="dv">1</span>]]</a></code></pre></div>
