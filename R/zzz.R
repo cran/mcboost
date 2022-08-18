@@ -4,8 +4,8 @@
 #' @import mlr3misc
 #' @import glmnet
 #' @import rpart
-#' @import mlr3proba
 #' @import mlr3pipelines
+#' @import rmarkdown
 #' @importFrom R6 R6Class is.R6
 #' @importFrom utils head
 #' @importFrom stats contrasts runif rnorm  setNames quantile
@@ -18,10 +18,8 @@
 
 register_pipeops = function() { # nocov start
   mlr3pipelines::mlr_pipeops$add("mcboost", PipeOpMCBoost)
-  mlr3pipelines::mlr_pipeops$add("mcboostsurv", PipeOpMCBoostSurv)
   mlr3pipelines::mlr_pipeops$add("learner_pred", PipeOpLearnerPred)
   mlr3pipelines::mlr_graphs$add("ppl_mcboost", ppl_mcboost)
-  mlr3pipelines::mlr_graphs$add("ppl_mcboostsurv", ppl_mcboostsurv)
 } # nocov end
 
 .onLoad = function(libname, pkgname) {  # nocov start

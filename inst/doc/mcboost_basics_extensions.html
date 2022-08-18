@@ -14,6 +14,35 @@
 
 <title>MCBoost - Basics and Extensions</title>
 
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -35,26 +64,27 @@
   }
 </style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -63,9 +93,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -319,19 +349,19 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(<span class="st">&quot;mcboost&quot;</span>)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(<span class="st">&quot;mlr3&quot;</span>)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">set.seed</span>(<span class="dv">83007</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">library</span>(<span class="st">&quot;mcboost&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">library</span>(<span class="st">&quot;mlr3&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">set.seed</span>(<span class="dv">83007</span>)</span></code></pre></div>
 <div id="example-0-multi-accuracy-in-6-lines-of-code" class="section level2">
 <h2>Example 0: Multi-Accuracy in 6 lines of code</h2>
 <p>As a brief introduction we show how to use <strong>mcboost</strong> in only 6 lines of code. For our example, we use the data from the <em>sonar</em> binary classification task. We instantiate a <code>MCBoost</code> instance by specifying a <code>auditor_fitter</code>. This <code>auditor_fitter</code> defines the splits into groups in each boosting iteration based on the obtained residuals. In this example, we choose a <code>Tree</code> based model. Afterwards, we run the <code>$multicalibrate()</code> method on our data to start multi-calibration. We only use the first 200 samples of the <em>sonar</em> data set to train our multi-calibrated model.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">tsk =<span class="st"> </span><span class="kw">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</a>
-<a class="sourceLine" id="cb2-2" title="2">d =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>feature_names)</a>
-<a class="sourceLine" id="cb2-3" title="3">l =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>target_names)[[<span class="dv">1</span>]]</a>
-<a class="sourceLine" id="cb2-4" title="4">mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">auditor_fitter =</span> <span class="st">&quot;TreeAuditorFitter&quot;</span>)</a>
-<a class="sourceLine" id="cb2-5" title="5">mc<span class="op">$</span><span class="kw">multicalibrate</span>(d[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>,], l[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>tsk =<span class="st"> </span><span class="kw">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>d =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>feature_names)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>l =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>target_names)[[<span class="dv">1</span>]]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">auditor_fitter =</span> <span class="st">&quot;TreeAuditorFitter&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">multicalibrate</span>(d[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>,], l[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>])</span></code></pre></div>
 <p>After the calibration, we use the model to predict on the left-out data (8 observations).</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">mc<span class="op">$</span><span class="kw">predict_probs</span>(d[<span class="dv">201</span><span class="op">:</span><span class="dv">208</span>,])</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">predict_probs</span>(d[<span class="dv">201</span><span class="op">:</span><span class="dv">208</span>,])</span></code></pre></div>
 </div>
 <div id="what-does-mcboost-do" class="section level2">
 <h2>What does mcboost do?</h2>
@@ -349,14 +379,14 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="example-1-multi-accuracy-boosting-on-the-adult-dataset" class="section level2">
 <h2>Example 1: Multi-Accuracy Boosting on the Adult Dataset</h2>
 <p>First we download the data and create an <code>mlr3</code> classification task:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">library</span>(data.table)</a>
-<a class="sourceLine" id="cb4-2" title="2">adult_train =<span class="st"> </span><span class="kw">fread</span>(</a>
-<a class="sourceLine" id="cb4-3" title="3">  <span class="st">&quot;https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_train.csv&quot;</span>,</a>
-<a class="sourceLine" id="cb4-4" title="4">  <span class="dt">stringsAsFactors =</span> <span class="ot">TRUE</span></a>
-<a class="sourceLine" id="cb4-5" title="5">)</a>
-<a class="sourceLine" id="cb4-6" title="6">adult_train<span class="op">$</span>Country =<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb4-7" title="7">adult_train<span class="op">$</span>fnlwgt =<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb4-8" title="8">train_tsk =<span class="st"> </span>TaskClassif<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;adult_train&quot;</span>, adult_train, <span class="dt">target =</span> <span class="st">&quot;Target&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">library</span>(data.table)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>adult_train =<span class="st"> </span><span class="kw">fread</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>  <span class="st">&quot;https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_train.csv&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>  <span class="dt">stringsAsFactors =</span> <span class="ot">TRUE</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>adult_train<span class="op">$</span>Country =<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>adult_train<span class="op">$</span>fnlwgt =<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>train_tsk =<span class="st"> </span>TaskClassif<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;adult_train&quot;</span>, adult_train, <span class="dt">target =</span> <span class="st">&quot;Target&quot;</span>)</span></code></pre></div>
 <p>We removed the features <code>Country</code> and <code>fnlwgt</code> since we expect them to have no predictive power. <code>fnlwgt</code> means final weight and aims to allocate similar weights to people with similar demographic characteristics, while <code>Country</code> has 42 distinct levels but 89 % of the observations are from the United States.</p>
 <div id="preprocessing" class="section level3">
 <h3>1.1 Preprocessing</h3>
@@ -367,107 +397,107 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li>One-hot encode categorical variables</li>
 <li>Impute NA’s using a histogram approach</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">library</span>(mlr3pipelines)</a>
-<a class="sourceLine" id="cb5-2" title="2">pipe =<span class="st"> </span><span class="kw">po</span>(<span class="st">&quot;collapsefactors&quot;</span>, <span class="dt">no_collapse_above_prevalence =</span> <span class="fl">0.0006</span>) <span class="op">%&gt;&gt;%</span></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="st">  </span><span class="kw">po</span>(<span class="st">&quot;fixfactors&quot;</span>) <span class="op">%&gt;&gt;%</span></a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="st">  </span><span class="kw">po</span>(<span class="st">&quot;encode&quot;</span>) <span class="op">%&gt;&gt;%</span></a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="st">  </span><span class="kw">po</span>(<span class="st">&quot;imputehist&quot;</span>)</a>
-<a class="sourceLine" id="cb5-6" title="6">prep_task =<span class="st"> </span>pipe<span class="op">$</span><span class="kw">train</span>(train_tsk)[[<span class="dv">1</span>]]</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">library</span>(mlr3pipelines)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>pipe =<span class="st"> </span><span class="kw">po</span>(<span class="st">&quot;collapsefactors&quot;</span>, <span class="dt">no_collapse_above_prevalence =</span> <span class="fl">0.0006</span>) <span class="op">%&gt;&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">po</span>(<span class="st">&quot;fixfactors&quot;</span>) <span class="op">%&gt;&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="st">  </span><span class="kw">po</span>(<span class="st">&quot;encode&quot;</span>) <span class="op">%&gt;&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">po</span>(<span class="st">&quot;imputehist&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>prep_task =<span class="st"> </span>pipe<span class="op">$</span><span class="kw">train</span>(train_tsk)[[<span class="dv">1</span>]]</span></code></pre></div>
 <p>In order to simulate settings where a sensitive feature is not available, we remove the (dummy encoded) feature <code>Race</code> from the training task.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">prep_task<span class="op">$</span><span class="kw">set_col_roles</span>(<span class="kw">c</span>(<span class="st">&quot;Race.Amer.Indian.Eskimo&quot;</span>, <span class="st">&quot;Race.Asian.Pac.Islander&quot;</span>, <span class="st">&quot;Race.Black&quot;</span>, <span class="st">&quot;Race.Other&quot;</span>, <span class="st">&quot;Race.White&quot;</span>), <span class="dt">remove_from =</span> <span class="st">&quot;feature&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>prep_task<span class="op">$</span><span class="kw">set_col_roles</span>(<span class="kw">c</span>(<span class="st">&quot;Race.Amer.Indian.Eskimo&quot;</span>, <span class="st">&quot;Race.Asian.Pac.Islander&quot;</span>, <span class="st">&quot;Race.Black&quot;</span>, <span class="st">&quot;Race.Other&quot;</span>, <span class="st">&quot;Race.White&quot;</span>), <span class="dt">remove_from =</span> <span class="st">&quot;feature&quot;</span>)</span></code></pre></div>
 <p>Now we fit a <code>random forest</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">library</span>(mlr3learners)</a>
-<a class="sourceLine" id="cb7-2" title="2">l =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;classif.ranger&quot;</span>, <span class="dt">num.trees =</span> 10L, <span class="dt">predict_type =</span> <span class="st">&quot;prob&quot;</span>)</a>
-<a class="sourceLine" id="cb7-3" title="3">l<span class="op">$</span><span class="kw">train</span>(prep_task)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">library</span>(mlr3learners)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>l =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;classif.ranger&quot;</span>, <span class="dt">num.trees =</span> 10L, <span class="dt">predict_type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>l<span class="op">$</span><span class="kw">train</span>(prep_task)</span></code></pre></div>
 </div>
 <div id="mcboost" class="section level3">
 <h3>1.2 MCBoost</h3>
 <p>A simple way to use the predictions from any <code>model</code> in <strong>mcboost</strong> is to wrap the predict function and provide it as an initial predictor. This can be done from any model / any library. Note, that we have to make sure, that our <code>init_predictor</code> returns a numeric vector of predictions.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">init_predictor =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb8-2" title="2">  l<span class="op">$</span><span class="kw">predict_newdata</span>(data)<span class="op">$</span>prob[, <span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb8-3" title="3">}</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>init_predictor =<span class="st"> </span><span class="cf">function</span>(data) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>  l<span class="op">$</span><span class="kw">predict_newdata</span>(data)<span class="op">$</span>prob[, <span class="dv">2</span>]</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>}</span></code></pre></div>
 <p>As <strong>mcboost</strong> requires the data to be provided in <code>X, y</code> format (a <code>data.table</code> or <code>data.frame</code> of features and a vector of labels), we create those two objects.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">data =<span class="st"> </span>prep_task<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> prep_task<span class="op">$</span>feature_names)</a>
-<a class="sourceLine" id="cb9-2" title="2">labels =<span class="st"> </span><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">one_hot</span>(prep_task<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> prep_task<span class="op">$</span>target_names)[[<span class="dv">1</span>]])</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>data =<span class="st"> </span>prep_task<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> prep_task<span class="op">$</span>feature_names)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>labels =<span class="st"> </span><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">one_hot</span>(prep_task<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> prep_task<span class="op">$</span>target_names)[[<span class="dv">1</span>]])</span></code></pre></div>
 <p>We use a ridge regularized linear regression model as the auditor.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">auditor_fitter =</span> <span class="st">&quot;RidgeAuditorFitter&quot;</span>, <span class="dt">init_predictor =</span> init_predictor)</a>
-<a class="sourceLine" id="cb10-2" title="2">mc<span class="op">$</span><span class="kw">multicalibrate</span>(data, labels)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">auditor_fitter =</span> <span class="st">&quot;RidgeAuditorFitter&quot;</span>, <span class="dt">init_predictor =</span> init_predictor)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">multicalibrate</span>(data, labels)</span></code></pre></div>
 <p>The <code>print</code> method additionally lists the average auditor values in the different buckets in each iteration:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">mc</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>mc</span></code></pre></div>
 </div>
 <div id="evaluation-on-test-data" class="section level3">
 <h3>1.3 Evaluation on Test Data</h3>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">adult_test =<span class="st"> </span><span class="kw">fread</span>(</a>
-<a class="sourceLine" id="cb12-2" title="2">  <span class="st">&quot;https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_test.csv&quot;</span>,</a>
-<a class="sourceLine" id="cb12-3" title="3">  <span class="dt">stringsAsFactors =</span> <span class="ot">TRUE</span></a>
-<a class="sourceLine" id="cb12-4" title="4">)</a>
-<a class="sourceLine" id="cb12-5" title="5">adult_test<span class="op">$</span>Country =<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb12-6" title="6">adult_test<span class="op">$</span>fnlwgt =<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb12-7" title="7"></a>
-<a class="sourceLine" id="cb12-8" title="8"><span class="co"># The first row seems to have an error</span></a>
-<a class="sourceLine" id="cb12-9" title="9">adult_test =<span class="st"> </span>adult_test[Target <span class="op">!=</span><span class="st"> &quot;&quot;</span>,]</a>
-<a class="sourceLine" id="cb12-10" title="10">adult_test<span class="op">$</span>Target =<span class="st"> </span><span class="kw">droplevels</span>(adult_test<span class="op">$</span>Target)</a>
-<a class="sourceLine" id="cb12-11" title="11"></a>
-<a class="sourceLine" id="cb12-12" title="12"><span class="co"># Note, that we have to convert columns from numeric to integer here:</span></a>
-<a class="sourceLine" id="cb12-13" title="13">sdc =<span class="st"> </span>train_tsk<span class="op">$</span>feature_types[type <span class="op">==</span><span class="st"> &quot;integer&quot;</span>, id]</a>
-<a class="sourceLine" id="cb12-14" title="14">adult_test[, (sdc) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">lapply</span>(.SD, as.integer), .SDcols =<span class="st"> </span>sdc]</a>
-<a class="sourceLine" id="cb12-15" title="15"></a>
-<a class="sourceLine" id="cb12-16" title="16">test_tsk =<span class="st"> </span>TaskClassif<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;adult_test&quot;</span>, adult_test, <span class="dt">target =</span> <span class="st">&quot;Target&quot;</span>)</a>
-<a class="sourceLine" id="cb12-17" title="17">prep_test =<span class="st"> </span>pipe<span class="op">$</span><span class="kw">predict</span>(test_tsk)[[<span class="dv">1</span>]]</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>adult_test =<span class="st"> </span><span class="kw">fread</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>  <span class="st">&quot;https://raw.githubusercontent.com/Yorko/mlcourse.ai/master/data/adult_test.csv&quot;</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>  <span class="dt">stringsAsFactors =</span> <span class="ot">TRUE</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a>adult_test<span class="op">$</span>Country =<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a>adult_test<span class="op">$</span>fnlwgt =<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a><span class="co"># The first row seems to have an error</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a>adult_test =<span class="st"> </span>adult_test[Target <span class="op">!=</span><span class="st"> &quot;&quot;</span>,]</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true"></a>adult_test<span class="op">$</span>Target =<span class="st"> </span><span class="kw">droplevels</span>(adult_test<span class="op">$</span>Target)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true"></a><span class="co"># Note, that we have to convert columns from numeric to integer here:</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true"></a>sdc =<span class="st"> </span>train_tsk<span class="op">$</span>feature_types[type <span class="op">==</span><span class="st"> &quot;integer&quot;</span>, id]</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true"></a>adult_test[, (sdc) <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">lapply</span>(.SD, as.integer), .SDcols =<span class="st"> </span>sdc]</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true"></a>test_tsk =<span class="st"> </span>TaskClassif<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;adult_test&quot;</span>, adult_test, <span class="dt">target =</span> <span class="st">&quot;Target&quot;</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true"></a>prep_test =<span class="st"> </span>pipe<span class="op">$</span><span class="kw">predict</span>(test_tsk)[[<span class="dv">1</span>]]</span></code></pre></div>
 <p>Now, we can again extract <code>X, y</code>.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">test_data =<span class="st"> </span>prep_test<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> prep_test<span class="op">$</span>feature_names)</a>
-<a class="sourceLine" id="cb13-2" title="2">test_labels =<span class="st"> </span><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">one_hot</span>(prep_test<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> prep_test<span class="op">$</span>target_names)[[<span class="dv">1</span>]])</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>test_data =<span class="st"> </span>prep_test<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> prep_test<span class="op">$</span>feature_names)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>test_labels =<span class="st"> </span><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">one_hot</span>(prep_test<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> prep_test<span class="op">$</span>target_names)[[<span class="dv">1</span>]])</span></code></pre></div>
 <p>and <strong>predict</strong>.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">prs =<span class="st"> </span>mc<span class="op">$</span><span class="kw">predict_probs</span>(test_data)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>prs =<span class="st"> </span>mc<span class="op">$</span><span class="kw">predict_probs</span>(test_data)</span></code></pre></div>
 <p>The accuracy of the multi-calibrated model</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">mean</span>(<span class="kw">round</span>(prs) <span class="op">==</span><span class="st"> </span>test_labels)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="kw">mean</span>(<span class="kw">round</span>(prs) <span class="op">==</span><span class="st"> </span>test_labels)</span></code></pre></div>
 <p>is similar to the non-calibrated model.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">mean</span>(<span class="kw">round</span>(<span class="kw">init_predictor</span>(test_data)) <span class="op">==</span><span class="st"> </span>test_labels)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="kw">mean</span>(<span class="kw">round</span>(<span class="kw">init_predictor</span>(test_data)) <span class="op">==</span><span class="st"> </span>test_labels)</span></code></pre></div>
 <p>But if we have a look at the bias for the different subpopulations of feature <code>Race</code>, we can see that the predictions got more calibrated. Note that we did not explicitly give neither the initial model nor the auditor access to the feature <code>Race</code>.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="co"># Get bias per subgroup for multi-calibrated predictor</span></a>
-<a class="sourceLine" id="cb17-2" title="2">adult_test<span class="op">$</span>biasmc =<span class="st"> </span>(prs <span class="op">-</span><span class="st"> </span>test_labels)</a>
-<a class="sourceLine" id="cb17-3" title="3">adult_test[, .(<span class="kw">abs</span>(<span class="kw">mean</span>(biasmc)), .N), by =<span class="st"> </span>.(Race)]</a>
-<a class="sourceLine" id="cb17-4" title="4"><span class="co"># Get bias per subgroup for initial predictor</span></a>
-<a class="sourceLine" id="cb17-5" title="5">adult_test<span class="op">$</span>biasinit =<span class="st"> </span>(<span class="kw">init_predictor</span>(test_data) <span class="op">-</span><span class="st"> </span>test_labels)</a>
-<a class="sourceLine" id="cb17-6" title="6">adult_test[, .(<span class="kw">abs</span>(<span class="kw">mean</span>(biasinit)), .N), by =<span class="st"> </span>.(Race)]</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="co"># Get bias per subgroup for multi-calibrated predictor</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a>adult_test<span class="op">$</span>biasmc =<span class="st"> </span>(prs <span class="op">-</span><span class="st"> </span>test_labels)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a>adult_test[, .(<span class="kw">abs</span>(<span class="kw">mean</span>(biasmc)), .N), by =<span class="st"> </span>.(Race)]</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a><span class="co"># Get bias per subgroup for initial predictor</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a>adult_test<span class="op">$</span>biasinit =<span class="st"> </span>(<span class="kw">init_predictor</span>(test_data) <span class="op">-</span><span class="st"> </span>test_labels)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true"></a>adult_test[, .(<span class="kw">abs</span>(<span class="kw">mean</span>(biasinit)), .N), by =<span class="st"> </span>.(Race)]</span></code></pre></div>
 </div>
 <div id="the-auditor-effect" class="section level3">
 <h3>1.4 The Auditor Effect</h3>
 <p>We can also obtain the auditor effect after multicalibration. This indicates “how much” each observation has been affected by multi-calibration (on average across iterations).</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">ae =<span class="st"> </span>mc<span class="op">$</span><span class="kw">auditor_effect</span>(test_data)</a>
-<a class="sourceLine" id="cb18-2" title="2"><span class="kw">hist</span>(ae)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a>ae =<span class="st"> </span>mc<span class="op">$</span><span class="kw">auditor_effect</span>(test_data)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a><span class="kw">hist</span>(ae)</span></code></pre></div>
 <p>We can see that there are a few instances with more pronounced effects, while most have actually only a low effect.</p>
 <p>In order to get more insights, we compute quantiles of the less and more effected population (median as cut-point) and analyze differences.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">effect =<span class="st"> </span><span class="kw">apply</span>(test_data[ae <span class="op">&gt;=</span><span class="st"> </span><span class="kw">median</span>(ae[ae <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]),], <span class="dv">2</span>, quantile)</a>
-<a class="sourceLine" id="cb19-2" title="2">no_effect  =<span class="st"> </span><span class="kw">apply</span>(test_data[ae <span class="op">&lt;</span><span class="st"> </span><span class="kw">median</span>(ae[ae<span class="op">&gt;</span><span class="dv">0</span>]),], <span class="dv">2</span>, quantile)</a>
-<a class="sourceLine" id="cb19-3" title="3">difference =<span class="st"> </span><span class="kw">apply</span>((effect<span class="op">-</span>no_effect), <span class="dv">2</span>, mean)</a>
-<a class="sourceLine" id="cb19-4" title="4">difference[difference <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.1</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a>effect =<span class="st"> </span><span class="kw">apply</span>(test_data[ae <span class="op">&gt;=</span><span class="st"> </span><span class="kw">median</span>(ae[ae <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]),], <span class="dv">2</span>, quantile)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>no_effect  =<span class="st"> </span><span class="kw">apply</span>(test_data[ae <span class="op">&lt;</span><span class="st"> </span><span class="kw">median</span>(ae[ae<span class="op">&gt;</span><span class="dv">0</span>]),], <span class="dv">2</span>, quantile)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>difference =<span class="st"> </span><span class="kw">apply</span>((effect<span class="op">-</span>no_effect), <span class="dv">2</span>, mean)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a>difference[difference <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.1</span>]</span></code></pre></div>
 <p>There seems to be a difference in some variables like <code>Education</code> and <code>Marital_Status</code>.</p>
 <p>We can further analyze the individuals:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">test_data[ae <span class="op">&gt;=</span><span class="st"> </span><span class="kw">median</span>(ae[ae<span class="op">&gt;</span><span class="dv">0</span>]), <span class="kw">names</span>(<span class="kw">which</span>(difference <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.1</span>)), with =<span class="st"> </span><span class="ot">FALSE</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a>test_data[ae <span class="op">&gt;=</span><span class="st"> </span><span class="kw">median</span>(ae[ae<span class="op">&gt;</span><span class="dv">0</span>]), <span class="kw">names</span>(<span class="kw">which</span>(difference <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.1</span>)), with =<span class="st"> </span><span class="ot">FALSE</span>]</span></code></pre></div>
 </div>
 <div id="predicting-using-only-the-first-n-iterations" class="section level3">
 <h3>Predicting using only the first ‘n’ iterations</h3>
 <p>Multi-calibration is an iterative procedure. The <code>t</code> parameter can be used to predict using only the first <code>t</code> iterations. This then predicts using only the first <code>t</code> iterations of the multi-calibration procedure.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">prs =<span class="st"> </span>mc<span class="op">$</span><span class="kw">predict_probs</span>(test_data, <span class="dt">t =</span> 3L)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a>prs =<span class="st"> </span>mc<span class="op">$</span><span class="kw">predict_probs</span>(test_data, <span class="dt">t =</span> 3L)</span></code></pre></div>
 </div>
 </div>
 <div id="example-2-mcboost-with-non-mlr3-models-glm" class="section level2">
 <h2>Example 2: MCBoost with non-mlr3 models: GLM</h2>
 <p><code>mcboost</code> does not require your model to be a <code>mlr3</code> model. As an input, <code>mcboost</code> expects a function <code>init_predictor</code> that takes as input <code>data</code> and returns a prediction.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">tsk =<span class="st"> </span><span class="kw">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</a>
-<a class="sourceLine" id="cb22-2" title="2">data =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>()[, Class <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">as.integer</span>(Class) <span class="op">-</span><span class="st"> </span>1L]</a>
-<a class="sourceLine" id="cb22-3" title="3">mod =<span class="st"> </span><span class="kw">glm</span>(<span class="dt">data =</span> data, <span class="dt">formula =</span> Class <span class="op">~</span><span class="st"> </span>.)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a>tsk =<span class="st"> </span><span class="kw">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>data =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>()[, Class <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">as.integer</span>(Class) <span class="op">-</span><span class="st"> </span>1L]</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a>mod =<span class="st"> </span><span class="kw">glm</span>(<span class="dt">data =</span> data, <span class="dt">formula =</span> Class <span class="op">~</span><span class="st"> </span>.)</span></code></pre></div>
 <p>The <code>init_predictor</code> could then use the <code>glm</code> model:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1">init_predictor =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb23-2" title="2">  <span class="kw">predict</span>(mod, data)</a>
-<a class="sourceLine" id="cb23-3" title="3">}</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a>init_predictor =<span class="st"> </span><span class="cf">function</span>(data) {</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a>  <span class="kw">predict</span>(mod, data)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a>}</span></code></pre></div>
 <p>… and we can calibrate this predictor.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">d =<span class="st"> </span>data[, <span class="dv">-1</span>]</a>
-<a class="sourceLine" id="cb24-2" title="2">l =<span class="st"> </span>data<span class="op">$</span>Class</a>
-<a class="sourceLine" id="cb24-3" title="3">mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">init_predictor =</span> init_predictor)</a>
-<a class="sourceLine" id="cb24-4" title="4">mc<span class="op">$</span><span class="kw">multicalibrate</span>(d[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>,], l[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>])</a>
-<a class="sourceLine" id="cb24-5" title="5">mc<span class="op">$</span><span class="kw">predict_probs</span>(d[<span class="dv">201</span><span class="op">:</span><span class="dv">208</span>,])</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a>d =<span class="st"> </span>data[, <span class="dv">-1</span>]</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a>l =<span class="st"> </span>data<span class="op">$</span>Class</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a>mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">init_predictor =</span> init_predictor)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">multicalibrate</span>(d[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>,], l[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>])</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">predict_probs</span>(d[<span class="dv">201</span><span class="op">:</span><span class="dv">208</span>,])</span></code></pre></div>
 </div>
 <div id="example-3-avoiding-overfitting-in-mcboost" class="section level2">
 <h2>Example 3: Avoiding Overfitting in MCBoost</h2>
@@ -475,50 +505,50 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="cvlearner" class="section level3">
 <h3>3.1 CVLearner</h3>
 <p>In this section we use a <code>Cross-Validated</code> learner that predicts on held-out data during the training phase. This idea is based on Wolpert (1992)’s Stacked Generalization. Other, simpler methods include choosing a smaller step size <code>eta</code> or reducing the number of <code>iters</code>.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">tsk =<span class="st"> </span><span class="kw">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a>tsk =<span class="st"> </span><span class="kw">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</span></code></pre></div>
 <p>As an <code>init_predictor</code> we again use a <code>ranger</code> model from mlr3 and construct an init predictor using the convenience function provided by <code>mcboost</code>.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1">learner =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;classif.ranger&quot;</span>, <span class="dt">predict_type =</span> <span class="st">&quot;prob&quot;</span>)</a>
-<a class="sourceLine" id="cb26-2" title="2">learner<span class="op">$</span><span class="kw">train</span>(tsk)</a>
-<a class="sourceLine" id="cb26-3" title="3">init_predictor =<span class="st"> </span><span class="kw">mlr3_init_predictor</span>(learner)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a>learner =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;classif.ranger&quot;</span>, <span class="dt">predict_type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a>learner<span class="op">$</span><span class="kw">train</span>(tsk)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a>init_predictor =<span class="st"> </span><span class="kw">mlr3_init_predictor</span>(learner)</span></code></pre></div>
 <p>… and we can calibrate this predictor. This time, we use a <code>CVTreeAuditorFitter</code> instead of a <code>TreeAuditorFitter</code>. This allows us to avoid overfitting similar to a technique coined <code>stacked generalization</code> first described by Wolpert in 1992. Note, that this can sometimes take a little longer since each learner is cross-validated using <code>3</code> folds (default).</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">d =<span class="st"> </span>data[, <span class="dv">-1</span>]</a>
-<a class="sourceLine" id="cb27-2" title="2">l =<span class="st"> </span>data<span class="op">$</span>Class</a>
-<a class="sourceLine" id="cb27-3" title="3">mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">init_predictor =</span> init_predictor, <span class="dt">auditor_fitter=</span>CVTreeAuditorFitter<span class="op">$</span><span class="kw">new</span>(), <span class="dt">max_iter =</span> 2L)</a>
-<a class="sourceLine" id="cb27-4" title="4">mc<span class="op">$</span><span class="kw">multicalibrate</span>(d[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>,], l[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>])</a>
-<a class="sourceLine" id="cb27-5" title="5">mc<span class="op">$</span><span class="kw">predict_probs</span>(d[<span class="dv">201</span><span class="op">:</span><span class="dv">208</span>,])</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a>d =<span class="st"> </span>data[, <span class="dv">-1</span>]</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a>l =<span class="st"> </span>data<span class="op">$</span>Class</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a>mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">init_predictor =</span> init_predictor, <span class="dt">auditor_fitter=</span>CVTreeAuditorFitter<span class="op">$</span><span class="kw">new</span>(), <span class="dt">max_iter =</span> 2L)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">multicalibrate</span>(d[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>,], l[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>])</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">predict_probs</span>(d[<span class="dv">201</span><span class="op">:</span><span class="dv">208</span>,])</span></code></pre></div>
 </div>
 <div id="data-splitting" class="section level3">
 <h3>3.2 Data Splitting</h3>
 <p>We can also use a fresh chunk of the validation data in each iteration. <code>mcboost</code> implements two strategies, <code>&quot;bootstrap&quot;</code> and <code>&quot;split&quot;</code>. While <code>&quot;split&quot;</code> simply splits up the data, <code>&quot;bootstrap&quot;</code> draws a new bootstrap sample of the data in each iteration.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">tsk =<span class="st"> </span><span class="kw">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a>tsk =<span class="st"> </span><span class="kw">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</span></code></pre></div>
 <p>Again, we use a <code>ranger</code> mlr3 model as our initial predictor:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">learner =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;classif.ranger&quot;</span>, <span class="dt">predict_type =</span> <span class="st">&quot;prob&quot;</span>)</a>
-<a class="sourceLine" id="cb29-2" title="2">learner<span class="op">$</span><span class="kw">train</span>(tsk)</a>
-<a class="sourceLine" id="cb29-3" title="3">init_predictor =<span class="st"> </span><span class="kw">mlr3_init_predictor</span>(learner)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a>learner =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;classif.ranger&quot;</span>, <span class="dt">predict_type =</span> <span class="st">&quot;prob&quot;</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a>learner<span class="op">$</span><span class="kw">train</span>(tsk)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a>init_predictor =<span class="st"> </span><span class="kw">mlr3_init_predictor</span>(learner)</span></code></pre></div>
 <p>and we can now calibrate:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">d =<span class="st"> </span>data[, <span class="dv">-1</span>]</a>
-<a class="sourceLine" id="cb30-2" title="2">l =<span class="st"> </span>data<span class="op">$</span>Class</a>
-<a class="sourceLine" id="cb30-3" title="3">mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb30-4" title="4">  <span class="dt">init_predictor =</span> init_predictor,</a>
-<a class="sourceLine" id="cb30-5" title="5">  <span class="dt">auditor_fitter=</span> TreeAuditorFitter<span class="op">$</span><span class="kw">new</span>(),</a>
-<a class="sourceLine" id="cb30-6" title="6">  <span class="dt">iter_sampling =</span> <span class="st">&quot;bootstrap&quot;</span></a>
-<a class="sourceLine" id="cb30-7" title="7">)</a>
-<a class="sourceLine" id="cb30-8" title="8">mc<span class="op">$</span><span class="kw">multicalibrate</span>(d[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>,], l[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>])</a>
-<a class="sourceLine" id="cb30-9" title="9">mc<span class="op">$</span><span class="kw">predict_probs</span>(d[<span class="dv">201</span><span class="op">:</span><span class="dv">208</span>,])</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a>d =<span class="st"> </span>data[, <span class="dv">-1</span>]</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a>l =<span class="st"> </span>data<span class="op">$</span>Class</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a>mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true"></a>  <span class="dt">init_predictor =</span> init_predictor,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true"></a>  <span class="dt">auditor_fitter=</span> TreeAuditorFitter<span class="op">$</span><span class="kw">new</span>(),</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true"></a>  <span class="dt">iter_sampling =</span> <span class="st">&quot;bootstrap&quot;</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true"></a>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">multicalibrate</span>(d[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>,], l[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>])</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">predict_probs</span>(d[<span class="dv">201</span><span class="op">:</span><span class="dv">208</span>,])</span></code></pre></div>
 </div>
 </div>
 <div id="example-4-adjusting-the-subpop-fitter" class="section level2">
 <h2>Example 4: Adjusting the SubPop Fitter</h2>
 <p>For this example, we use the <em>sonar</em> dataset once again:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">tsk =<span class="st"> </span><span class="kw">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</a>
-<a class="sourceLine" id="cb31-2" title="2">data =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>feature_names)</a>
-<a class="sourceLine" id="cb31-3" title="3">labels =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>target_names)[[<span class="dv">1</span>]]</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a>tsk =<span class="st"> </span><span class="kw">tsk</span>(<span class="st">&quot;sonar&quot;</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a>data =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>feature_names)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true"></a>labels =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>target_names)[[<span class="dv">1</span>]]</span></code></pre></div>
 <div id="learnerauditorfitter" class="section level3">
 <h3>4.1 LearnerAuditorFitter</h3>
 <p>The Subpop-fitter can be easily adjusted by constructing it from a <code>LearnerAuditorFitter</code>. This allows for using any <strong>mlr3</strong> learner. See <a href="https://mlr3extralearners.mlr-org.com/articles/learners/list_learners.html">here</a> for a list of available learners.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">rf =<span class="st"> </span>LearnerAuditorFitter<span class="op">$</span><span class="kw">new</span>(<span class="kw">lrn</span>(<span class="st">&quot;regr.rpart&quot;</span>, <span class="dt">minsplit =</span> 10L))</a>
-<a class="sourceLine" id="cb32-2" title="2">mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">auditor_fitter =</span> rf)</a>
-<a class="sourceLine" id="cb32-3" title="3">mc<span class="op">$</span><span class="kw">multicalibrate</span>(data, labels)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a>rf =<span class="st"> </span>LearnerAuditorFitter<span class="op">$</span><span class="kw">new</span>(<span class="kw">lrn</span>(<span class="st">&quot;regr.rpart&quot;</span>, <span class="dt">minsplit =</span> 10L))</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a>mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">auditor_fitter =</span> rf)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">multicalibrate</span>(data, labels)</span></code></pre></div>
 <p>The <code>TreeAuditorFitter</code> and <code>RidgeAuditorFitter</code> are two instantiations of this Fitter with pre-defined learners. By providing their character strings the fitter could be automatically constructed.</p>
 </div>
 <div id="subpopauditorfitter-subgroupauditorfitter" class="section level3">
@@ -527,120 +557,120 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p><strong>Splitting via the dataset</strong></p>
 <p>In order to split the data into groups according to a set of columns, we use a <code>SubpopAuditorFitter</code> together with a list of <code>subpops</code>. Those define the group splits to multi-calibrate on. These splits can be either a <code>character</code> string, referencing a binary variable in the data or a <code>function</code> that, when evaluated on the data, returns a binary vector.</p>
 <p>In order to showcase both options, we add a binary variable to our <code>data</code>:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">data[, Bin <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="kw">nrow</span>(data), <span class="dt">replace =</span> <span class="ot">TRUE</span>)]</a></code></pre></div>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">rf =<span class="st"> </span>SubpopAuditorFitter<span class="op">$</span><span class="kw">new</span>(<span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb34-2" title="2">  <span class="st">&quot;Bin&quot;</span>,</a>
-<a class="sourceLine" id="cb34-3" title="3">  <span class="cf">function</span>(data) {data[[<span class="st">&quot;V1&quot;</span>]] <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.2</span>},</a>
-<a class="sourceLine" id="cb34-4" title="4">  <span class="cf">function</span>(data) {data[[<span class="st">&quot;V1&quot;</span>]] <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.2</span> <span class="op">|</span><span class="st"> </span>data[[<span class="st">&quot;V3&quot;</span>]] <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.29</span>}</a>
-<a class="sourceLine" id="cb34-5" title="5">))</a></code></pre></div>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">auditor_fitter =</span> rf)</a>
-<a class="sourceLine" id="cb35-2" title="2">mc<span class="op">$</span><span class="kw">multicalibrate</span>(data, labels)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a>data[, Bin <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="kw">nrow</span>(data), <span class="dt">replace =</span> <span class="ot">TRUE</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a>rf =<span class="st"> </span>SubpopAuditorFitter<span class="op">$</span><span class="kw">new</span>(<span class="kw">list</span>(</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a>  <span class="st">&quot;Bin&quot;</span>,</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a>  <span class="cf">function</span>(data) {data[[<span class="st">&quot;V1&quot;</span>]] <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.2</span>},</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true"></a>  <span class="cf">function</span>(data) {data[[<span class="st">&quot;V1&quot;</span>]] <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.2</span> <span class="op">|</span><span class="st"> </span>data[[<span class="st">&quot;V3&quot;</span>]] <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.29</span>}</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true"></a>))</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a>mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">auditor_fitter =</span> rf)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">multicalibrate</span>(data, labels)</span></code></pre></div>
 <p>And we can again apply it to predict on new data:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1">mc<span class="op">$</span><span class="kw">predict_probs</span>(data)</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">predict_probs</span>(data)</span></code></pre></div>
 <p><strong>Manually defined masks</strong></p>
 <p>If we want to add the splitting from the outside, by supplying binary masks for the rows of the data, we can provide manually defined masks. Note, that the masks have to correspond with the number of rows in the dataset.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">rf =<span class="st"> </span>SubgroupAuditorFitter<span class="op">$</span><span class="kw">new</span>(<span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb37-2" title="2">  <span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dv">104</span>),</a>
-<a class="sourceLine" id="cb37-3" title="3">  <span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">52</span>)</a>
-<a class="sourceLine" id="cb37-4" title="4">))</a></code></pre></div>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1">mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">auditor_fitter =</span> rf)</a>
-<a class="sourceLine" id="cb38-2" title="2">mc<span class="op">$</span><span class="kw">multicalibrate</span>(data, labels)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a>rf =<span class="st"> </span>SubgroupAuditorFitter<span class="op">$</span><span class="kw">new</span>(<span class="kw">list</span>(</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a>  <span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dv">104</span>),</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a>  <span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">52</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a>))</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a>mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">auditor_fitter =</span> rf)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">multicalibrate</span>(data, labels)</span></code></pre></div>
 <p>During prediction, we now have to supply a set of masks for the prediction data.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1">predict_masks =<span class="st"> </span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb39-2" title="2">  <span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dv">52</span>),</a>
-<a class="sourceLine" id="cb39-3" title="3">  <span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">26</span>)</a>
-<a class="sourceLine" id="cb39-4" title="4">)</a></code></pre></div>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">mc<span class="op">$</span><span class="kw">predict_probs</span>(data[<span class="dv">1</span><span class="op">:</span><span class="dv">104</span>,], <span class="dt">subgroup_masks =</span> predict_masks)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a>predict_masks =<span class="st"> </span><span class="kw">list</span>(</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a>  <span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dv">52</span>),</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a>  <span class="kw">rep</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="dv">26</span>)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">predict_probs</span>(data[<span class="dv">1</span><span class="op">:</span><span class="dv">104</span>,], <span class="dt">subgroup_masks =</span> predict_masks)</span></code></pre></div>
 </div>
 </div>
 <div id="example-5-multi-calibrating-data-with-missing-values-using-a-pipeline" class="section level2">
 <h2>Example 5: Multi-Calibrating data with missing values using a pipeline</h2>
 <p>When data has missing values or other non-standard columns, we often have to pre-process data in order to be able to fit models. Those preprocessing steps can be embedded into the <code>SubPopFitter</code> by using a <strong>mlr3pipelines</strong> Pipeline. The following code shows a brief example:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1">tsk =<span class="st"> </span><span class="kw">tsk</span>(<span class="st">&quot;penguins&quot;</span>)</a>
-<a class="sourceLine" id="cb41-2" title="2"><span class="co"># first we convert to a binary task</span></a>
-<a class="sourceLine" id="cb41-3" title="3">row_ids =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;species&quot;</span>, <span class="st">&quot;..row_id&quot;</span>))[species <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Adelie&quot;</span>, <span class="st">&quot;Gentoo&quot;</span>)][[<span class="st">&quot;..row_id&quot;</span>]]</a>
-<a class="sourceLine" id="cb41-4" title="4">tsk<span class="op">$</span><span class="kw">filter</span>(row_ids)<span class="op">$</span><span class="kw">droplevels</span>()</a>
-<a class="sourceLine" id="cb41-5" title="5">tsk</a></code></pre></div>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1"><span class="kw">library</span>(<span class="st">&quot;mlr3pipelines&quot;</span>)</a>
-<a class="sourceLine" id="cb42-2" title="2"><span class="kw">library</span>(<span class="st">&quot;mlr3learners&quot;</span>)</a>
-<a class="sourceLine" id="cb42-3" title="3"></a>
-<a class="sourceLine" id="cb42-4" title="4"><span class="co"># Convert task to X,y</span></a>
-<a class="sourceLine" id="cb42-5" title="5">X =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>feature_names)</a>
-<a class="sourceLine" id="cb42-6" title="6">y =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>target_names)</a>
-<a class="sourceLine" id="cb42-7" title="7"></a>
-<a class="sourceLine" id="cb42-8" title="8"><span class="co"># Our inital model is a pipeline that imputes missings and encodes categoricals</span></a>
-<a class="sourceLine" id="cb42-9" title="9">init_model =<span class="st"> </span><span class="kw">as_learner</span>(<span class="kw">po</span>(<span class="st">&quot;encode&quot;</span>) <span class="op">%&gt;&gt;%</span><span class="st"> </span><span class="kw">po</span>(<span class="st">&quot;imputehist&quot;</span>) <span class="op">%&gt;&gt;%</span></a>
-<a class="sourceLine" id="cb42-10" title="10"><span class="st">  </span><span class="kw">lrn</span>(<span class="st">&quot;classif.glmnet&quot;</span>, <span class="dt">predict_type =</span> <span class="st">&quot;prob&quot;</span>))</a>
-<a class="sourceLine" id="cb42-11" title="11"><span class="co"># And we fit it on a subset of the data in order to simulate a poorly performing model.</span></a>
-<a class="sourceLine" id="cb42-12" title="12">init_model<span class="op">$</span><span class="kw">train</span>(tsk<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">filter</span>(row_ids[<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>, <span class="dv">160</span><span class="op">:</span><span class="dv">170</span>)]))</a>
-<a class="sourceLine" id="cb42-13" title="13">init_model<span class="op">$</span><span class="kw">predict</span>(tsk)<span class="op">$</span><span class="kw">score</span>()</a>
-<a class="sourceLine" id="cb42-14" title="14"></a>
-<a class="sourceLine" id="cb42-15" title="15"><span class="co"># We define a pipeline that imputes missings and encodes categoricals</span></a>
-<a class="sourceLine" id="cb42-16" title="16">auditor =<span class="st"> </span><span class="kw">as_learner</span>(<span class="kw">po</span>(<span class="st">&quot;encode&quot;</span>) <span class="op">%&gt;&gt;%</span><span class="st"> </span><span class="kw">po</span>(<span class="st">&quot;imputehist&quot;</span>) <span class="op">%&gt;&gt;%</span><span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;regr.rpart&quot;</span>))</a>
-<a class="sourceLine" id="cb42-17" title="17"></a>
-<a class="sourceLine" id="cb42-18" title="18">mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">auditor_fitter =</span> auditor, <span class="dt">init_predictor =</span> init_model)</a>
-<a class="sourceLine" id="cb42-19" title="19">mc<span class="op">$</span><span class="kw">multicalibrate</span>(X, y)</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a>tsk =<span class="st"> </span><span class="kw">tsk</span>(<span class="st">&quot;penguins&quot;</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true"></a><span class="co"># first we convert to a binary task</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true"></a>row_ids =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;species&quot;</span>, <span class="st">&quot;..row_id&quot;</span>))[species <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Adelie&quot;</span>, <span class="st">&quot;Gentoo&quot;</span>)][[<span class="st">&quot;..row_id&quot;</span>]]</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true"></a>tsk<span class="op">$</span><span class="kw">filter</span>(row_ids)<span class="op">$</span><span class="kw">droplevels</span>()</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true"></a>tsk</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true"></a><span class="kw">library</span>(<span class="st">&quot;mlr3pipelines&quot;</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true"></a><span class="kw">library</span>(<span class="st">&quot;mlr3learners&quot;</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true"></a><span class="co"># Convert task to X,y</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true"></a>X =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>feature_names)</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true"></a>y =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>target_names)</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true"></a></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true"></a><span class="co"># Our inital model is a pipeline that imputes missings and encodes categoricals</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true"></a>init_model =<span class="st"> </span><span class="kw">as_learner</span>(<span class="kw">po</span>(<span class="st">&quot;encode&quot;</span>) <span class="op">%&gt;&gt;%</span><span class="st"> </span><span class="kw">po</span>(<span class="st">&quot;imputehist&quot;</span>) <span class="op">%&gt;&gt;%</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true"></a><span class="st">  </span><span class="kw">lrn</span>(<span class="st">&quot;classif.glmnet&quot;</span>, <span class="dt">predict_type =</span> <span class="st">&quot;prob&quot;</span>))</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true"></a><span class="co"># And we fit it on a subset of the data in order to simulate a poorly performing model.</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true"></a>init_model<span class="op">$</span><span class="kw">train</span>(tsk<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">filter</span>(row_ids[<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>, <span class="dv">160</span><span class="op">:</span><span class="dv">170</span>)]))</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true"></a>init_model<span class="op">$</span><span class="kw">predict</span>(tsk)<span class="op">$</span><span class="kw">score</span>()</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true"></a></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true"></a><span class="co"># We define a pipeline that imputes missings and encodes categoricals</span></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true"></a>auditor =<span class="st"> </span><span class="kw">as_learner</span>(<span class="kw">po</span>(<span class="st">&quot;encode&quot;</span>) <span class="op">%&gt;&gt;%</span><span class="st"> </span><span class="kw">po</span>(<span class="st">&quot;imputehist&quot;</span>) <span class="op">%&gt;&gt;%</span><span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;regr.rpart&quot;</span>))</span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true"></a></span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true"></a>mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">auditor_fitter =</span> auditor, <span class="dt">init_predictor =</span> init_model)</span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">multicalibrate</span>(X, y)</span></code></pre></div>
 <p>and we can observe where it improved:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1">mc</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a>mc</span></code></pre></div>
 </div>
 <div id="example-6-multi-calibration-regression" class="section level2">
 <h2>Example 6: Multi-Calibration Regression</h2>
 <p>We abuse the <code>Communities &amp; Crime</code> dataset in order to showcase how <code>mcboost</code> can be used in a regression setting.</p>
 <p>First we download the data and create an <code>mlr3</code> regression task:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1"><span class="kw">library</span>(data.table)</a>
-<a class="sourceLine" id="cb44-2" title="2"><span class="kw">library</span>(mlr3oml)</a>
-<a class="sourceLine" id="cb44-3" title="3">oml =<span class="st"> </span>OMLData<span class="op">$</span><span class="kw">new</span>(<span class="dv">42730</span>)</a>
-<a class="sourceLine" id="cb44-4" title="4">data =<span class="st"> </span>oml<span class="op">$</span>data</a>
-<a class="sourceLine" id="cb44-5" title="5"></a>
-<a class="sourceLine" id="cb44-6" title="6">tsk =<span class="st"> </span>TaskRegr<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;communities_crime&quot;</span>, data, <span class="dt">target =</span> <span class="st">&quot;ViolentCrimesPerPop&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a><span class="kw">library</span>(data.table)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a><span class="kw">library</span>(mlr3oml)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true"></a>oml =<span class="st"> </span>OMLData<span class="op">$</span><span class="kw">new</span>(<span class="dv">42730</span>)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true"></a>data =<span class="st"> </span>oml<span class="op">$</span>data</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true"></a></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true"></a>tsk =<span class="st"> </span>TaskRegr<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;communities_crime&quot;</span>, data, <span class="dt">target =</span> <span class="st">&quot;ViolentCrimesPerPop&quot;</span>)</span></code></pre></div>
 <p>Currently, <strong>mcboost</strong> only allows to work with targets between 0 and 1. Luckily, our target variable’s values are already in that range, but if they were not, we could simply scale them to [0;1] before our analysis.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="kw">summary</span>(data<span class="op">$</span>ViolentCrimesPerPop)</a></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a><span class="kw">summary</span>(data<span class="op">$</span>ViolentCrimesPerPop)</span></code></pre></div>
 <p>We again split our task into <strong>train</strong> and <strong>test</strong>. We do this in <code>mlr3</code> by simply setting some (here 500) row roles to <code>&quot;holdout&quot;</code>.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">tsk<span class="op">$</span><span class="kw">set_row_roles</span>(<span class="kw">sample</span>(tsk<span class="op">$</span>row_roles<span class="op">$</span>use, <span class="dv">500</span>), <span class="st">&quot;holdout&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a>tsk<span class="op">$</span><span class="kw">set_row_roles</span>(<span class="kw">sample</span>(tsk<span class="op">$</span>row_roles<span class="op">$</span>use, <span class="dv">500</span>), <span class="st">&quot;holdout&quot;</span>)</span></code></pre></div>
 <div id="preprocessing-1" class="section level3">
 <h3>6.1 Preprocessing</h3>
 <p>Then we do basic preprocessing, since we do not have any categorical variables, we only impute NA’s using a histogram approach.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="kw">library</span>(mlr3pipelines)</a>
-<a class="sourceLine" id="cb47-2" title="2">pipe =<span class="st">  </span><span class="kw">po</span>(<span class="st">&quot;imputehist&quot;</span>)</a>
-<a class="sourceLine" id="cb47-3" title="3">prep_task =<span class="st"> </span>pipe<span class="op">$</span><span class="kw">train</span>(<span class="kw">list</span>(tsk))[[<span class="dv">1</span>]]</a>
-<a class="sourceLine" id="cb47-4" title="4"></a>
-<a class="sourceLine" id="cb47-5" title="5">prep_task<span class="op">$</span><span class="kw">set_col_roles</span>(<span class="kw">c</span>(<span class="st">&quot;racepctblack&quot;</span>, <span class="st">&quot;racePctWhite&quot;</span>, <span class="st">&quot;racePctAsian&quot;</span>, <span class="st">&quot;racePctHisp&quot;</span>, <span class="st">&quot;community&quot;</span>), <span class="dt">remove_from =</span> <span class="st">&quot;feature&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true"></a><span class="kw">library</span>(mlr3pipelines)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true"></a>pipe =<span class="st">  </span><span class="kw">po</span>(<span class="st">&quot;imputehist&quot;</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true"></a>prep_task =<span class="st"> </span>pipe<span class="op">$</span><span class="kw">train</span>(<span class="kw">list</span>(tsk))[[<span class="dv">1</span>]]</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true"></a>prep_task<span class="op">$</span><span class="kw">set_col_roles</span>(<span class="kw">c</span>(<span class="st">&quot;racepctblack&quot;</span>, <span class="st">&quot;racePctWhite&quot;</span>, <span class="st">&quot;racePctAsian&quot;</span>, <span class="st">&quot;racePctHisp&quot;</span>, <span class="st">&quot;community&quot;</span>), <span class="dt">remove_from =</span> <span class="st">&quot;feature&quot;</span>)</span></code></pre></div>
 <p>Now we fit our first <code>Learner</code>: A <code>random forest</code>.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="kw">library</span>(mlr3learners)</a>
-<a class="sourceLine" id="cb48-2" title="2">l =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;regr.ranger&quot;</span>, <span class="dt">num.trees =</span> 10L)</a>
-<a class="sourceLine" id="cb48-3" title="3">l<span class="op">$</span><span class="kw">train</span>(prep_task)</a></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true"></a><span class="kw">library</span>(mlr3learners)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true"></a>l =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;regr.ranger&quot;</span>, <span class="dt">num.trees =</span> 10L)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true"></a>l<span class="op">$</span><span class="kw">train</span>(prep_task)</span></code></pre></div>
 </div>
 <div id="mcboost-1" class="section level3">
 <h3>6.2 MCBoost</h3>
 <p>A simple way to use the predictions from any <code>Model</code> in <strong>mcboost</strong> is to wrap the predict function and provide it as an initial predictor. This can be done from any model / any library. Note, that we have to make sure, that our <code>init_predictor</code> returns a numeric vector of predictions.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1">init_predictor =<span class="st"> </span><span class="cf">function</span>(data) {</a>
-<a class="sourceLine" id="cb49-2" title="2">  l<span class="op">$</span><span class="kw">predict_newdata</span>(data)<span class="op">$</span>response</a>
-<a class="sourceLine" id="cb49-3" title="3">}</a></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true"></a>init_predictor =<span class="st"> </span><span class="cf">function</span>(data) {</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true"></a>  l<span class="op">$</span><span class="kw">predict_newdata</span>(data)<span class="op">$</span>response</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true"></a>}</span></code></pre></div>
 <p>As <strong>mcboost</strong> requires the data to be provided in <code>X, y</code> format (a <code>data.table</code> or <code>data.frame</code> of features and a vector of labels), we create those two objects.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1">data =<span class="st"> </span>prep_task<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> prep_task<span class="op">$</span>feature_names)</a>
-<a class="sourceLine" id="cb50-2" title="2">labels =<span class="st"> </span>prep_task<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> prep_task<span class="op">$</span>target_names)[[<span class="dv">1</span>]]</a></code></pre></div>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1">mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">auditor_fitter =</span> <span class="st">&quot;RidgeAuditorFitter&quot;</span>, <span class="dt">init_predictor =</span> init_predictor, <span class="dt">eta =</span> <span class="fl">0.1</span>)</a>
-<a class="sourceLine" id="cb51-2" title="2">mc<span class="op">$</span><span class="kw">multicalibrate</span>(data, labels)</a></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true"></a>data =<span class="st"> </span>prep_task<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> prep_task<span class="op">$</span>feature_names)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true"></a>labels =<span class="st"> </span>prep_task<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> prep_task<span class="op">$</span>target_names)[[<span class="dv">1</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true"></a>mc =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">auditor_fitter =</span> <span class="st">&quot;RidgeAuditorFitter&quot;</span>, <span class="dt">init_predictor =</span> init_predictor, <span class="dt">eta =</span> <span class="fl">0.1</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true"></a>mc<span class="op">$</span><span class="kw">multicalibrate</span>(data, labels)</span></code></pre></div>
 </div>
 <div id="evaluation-on-test-data-1" class="section level3">
 <h3>6.3 Evaluation on Test Data</h3>
 <p>We first create the test task by setting the <code>holdout</code> rows to <code>use</code>, and then use our preprocessing <code>pipe&#39;s</code> predict function to also impute missing values for the validation data. Then we again extract features <code>X</code> and target <code>y</code>.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1">test_task =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">clone</span>()</a>
-<a class="sourceLine" id="cb52-2" title="2">test_task<span class="op">$</span>row_roles<span class="op">$</span>use =<span class="st"> </span>test_task<span class="op">$</span>row_roles<span class="op">$</span>holdout</a>
-<a class="sourceLine" id="cb52-3" title="3">test_task =<span class="st"> </span>pipe<span class="op">$</span><span class="kw">predict</span>(<span class="kw">list</span>(test_task))[[<span class="dv">1</span>]]</a>
-<a class="sourceLine" id="cb52-4" title="4">test_data =<span class="st"> </span>test_task<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>feature_names)</a>
-<a class="sourceLine" id="cb52-5" title="5">test_labels =<span class="st"> </span>test_task<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>target_names)[[<span class="dv">1</span>]]</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a>test_task =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">clone</span>()</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true"></a>test_task<span class="op">$</span>row_roles<span class="op">$</span>use =<span class="st"> </span>test_task<span class="op">$</span>row_roles<span class="op">$</span>holdout</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true"></a>test_task =<span class="st"> </span>pipe<span class="op">$</span><span class="kw">predict</span>(<span class="kw">list</span>(test_task))[[<span class="dv">1</span>]]</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true"></a>test_data =<span class="st"> </span>test_task<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>feature_names)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true"></a>test_labels =<span class="st"> </span>test_task<span class="op">$</span><span class="kw">data</span>(<span class="dt">cols =</span> tsk<span class="op">$</span>target_names)[[<span class="dv">1</span>]]</span></code></pre></div>
 <p>and <strong>predict</strong>.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1">prs =<span class="st"> </span>mc<span class="op">$</span><span class="kw">predict_probs</span>(test_data)</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true"></a>prs =<span class="st"> </span>mc<span class="op">$</span><span class="kw">predict_probs</span>(test_data)</span></code></pre></div>
 <p>Now we can compute the MSE of the multi-calibrated model</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="kw">mean</span>((prs <span class="op">-</span><span class="st"> </span>test_labels)<span class="op">^</span><span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true"></a><span class="kw">mean</span>((prs <span class="op">-</span><span class="st"> </span>test_labels)<span class="op">^</span><span class="dv">2</span>)</span></code></pre></div>
 <p>and compare to the non-calibrated version:</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="kw">mean</span>((<span class="kw">init_predictor</span>(test_data) <span class="op">-</span><span class="st"> </span>test_labels)<span class="op">^</span><span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true"></a><span class="kw">mean</span>((<span class="kw">init_predictor</span>(test_data) <span class="op">-</span><span class="st"> </span>test_labels)<span class="op">^</span><span class="dv">2</span>)</span></code></pre></div>
 <p>But looking at sub-populations we can see that the predictions got more calibrated. Since we cannot show all subpopulations we only show the MSE for the feature <code>racepctblack</code>.</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1">test_data<span class="op">$</span>se_mcboost =<span class="st"> </span>(prs <span class="op">-</span><span class="st"> </span>test_labels)<span class="op">^</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb56-2" title="2">test_data<span class="op">$</span>se_init =<span class="st"> </span>(<span class="kw">init_predictor</span>(test_data) <span class="op">-</span><span class="st"> </span>test_labels)<span class="op">^</span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb56-3" title="3"></a>
-<a class="sourceLine" id="cb56-4" title="4">test_data[, .(<span class="dt">mcboost =</span> <span class="kw">mean</span>(se_mcboost), <span class="dt">initial =</span> <span class="kw">mean</span>(se_init), .N), by =<span class="st"> </span>.(racepctblack <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true"></a>test_data<span class="op">$</span>se_mcboost =<span class="st"> </span>(prs <span class="op">-</span><span class="st"> </span>test_labels)<span class="op">^</span><span class="dv">2</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true"></a>test_data<span class="op">$</span>se_init =<span class="st"> </span>(<span class="kw">init_predictor</span>(test_data) <span class="op">-</span><span class="st"> </span>test_labels)<span class="op">^</span><span class="dv">2</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true"></a></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true"></a>test_data[, .(<span class="dt">mcboost =</span> <span class="kw">mean</span>(se_mcboost), <span class="dt">initial =</span> <span class="kw">mean</span>(se_init), .N), by =<span class="st"> </span>.(racepctblack <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>)]</span></code></pre></div>
 </div>
 </div>
 

@@ -17,7 +17,6 @@ Used to assess multi-calibration based on a list of
 binary valued columns: \code{subpops} passed during initialization.
 }
 \examples{
-  \dontrun{
   library("data.table")
   data = data.table(
     "AGE_NA" = c(0, 0, 0, 0, 0),
@@ -31,7 +30,6 @@ binary valued columns: \code{subpops} passed during initialization.
   pops = list("AGE_NA", "AGE_0_10", "AGE_11_20", "AGE_21_31", function(x) {x[["X1" > 0.5]]})
   sf = SubpopAuditorFitter$new(subpops = pops)
   sf$fit(data, label - 0.5)
-  }
 }
 \seealso{
 Other AuditorFitter: 
@@ -55,21 +53,21 @@ Initialize a SubpopAuditorFitter}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{SubpopAuditorFitter$new()}}
-\item \href{#method-fit}{\code{SubpopAuditorFitter$fit()}}
-\item \href{#method-clone}{\code{SubpopAuditorFitter$clone()}}
+\item \href{#method-SubpopAuditorFitter-new}{\code{SubpopAuditorFitter$new()}}
+\item \href{#method-SubpopAuditorFitter-fit}{\code{SubpopAuditorFitter$fit()}}
+\item \href{#method-SubpopAuditorFitter-clone}{\code{SubpopAuditorFitter$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid">}\href{../../mcboost/html/AuditorFitter.html#method-fit_to_resid}{\code{mcboost::AuditorFitter$fit_to_resid()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="mcboost" data-topic="AuditorFitter" data-id="fit_to_resid"><a href='../../mcboost/html/AuditorFitter.html#method-AuditorFitter-fit_to_resid'><code>mcboost::AuditorFitter$fit_to_resid()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-SubpopAuditorFitter-new"></a>}}
+\if{latex}{\out{\hypertarget{method-SubpopAuditorFitter-new}{}}}
 \subsection{Method \code{new()}}{
 Initializes a \code{\link{SubpopAuditorFitter}} that
 assesses multi-calibration within each group defined
@@ -91,8 +89,8 @@ e.g. list(age = c('20-29','30-39','40+'), nJobs = c(0,1,2,'3+'), ,..).}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-fit"></a>}}
-\if{latex}{\out{\hypertarget{method-fit}{}}}
+\if{html}{\out{<a id="method-SubpopAuditorFitter-fit"></a>}}
+\if{latex}{\out{\hypertarget{method-SubpopAuditorFitter-fit}{}}}
 \subsection{Method \code{fit()}}{
 Fit the learner and compute correlation
 \subsection{Usage}{
@@ -115,8 +113,8 @@ Mask applied to the data. Only used for \code{SubgroupAuditorFitter}.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-SubpopAuditorFitter-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SubpopAuditorFitter-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
