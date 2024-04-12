@@ -27,46 +27,31 @@ document.addEventListener('DOMContentLoaded', function(e) {
   }
 });
 </script>
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
-  }
-});
-</script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -78,55 +63,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -135,13 +119,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -349,234 +340,309 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">library</span>(PracTools)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">library</span>(ranger)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="kw">library</span>(neuralnet)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="kw">library</span>(formattable)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="kw">library</span>(mlr3)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="kw">library</span>(mlr3learners)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="kw">library</span>(mcboost)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(PracTools)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(ranger)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(neuralnet)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(formattable)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(mlr3)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">library</span>(mlr3learners)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">library</span>(mcboost)</span></code></pre></div>
 <div id="data-and-setup" class="section level2">
 <h2>Data and Setup</h2>
-<p>This vignette presents two typical use cases of MCBoost with data from a health survey. The goal is to post-process two initial prediction models for multi-accuracy using different flavors of MCBoost, and to eventually compare the naive and post-processed predictors overall and for subpopulations. The first scenario starts with a neural net and, as an example, evaluates the initial and post-processed predictors with a focus on subgroup accuracy after running MCBoost. The second scenario uses a random forest and evaluates the initial and post-processed predictors with respect to subgroup calibration.</p>
-<p>We use data derived from the National Health Interview Survey (NHIS 2003), which includes demographic and health-related variables for 21,588 individuals. This data can directly be included from the <code>PracTools</code> package.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">data</span>(nhis.large)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="co">#&gt; Warning in data(nhis.large): data set &#39;nhis.large&#39; not found</span></span></code></pre></div>
+<p>This vignette presents two typical use cases of MCBoost with data
+from a health survey. The goal is to post-process two initial prediction
+models for multi-accuracy using different flavors of MCBoost, and to
+eventually compare the naive and post-processed predictors overall and
+for subpopulations. The first scenario starts with a neural net and, as
+an example, evaluates the initial and post-processed predictors with a
+focus on subgroup accuracy after running MCBoost. The second scenario
+uses a random forest and evaluates the initial and post-processed
+predictors with respect to subgroup calibration.</p>
+<p>We use data derived from the National Health Interview Survey (NHIS
+2003), which includes demographic and health-related variables for
+21,588 individuals. This data can directly be included from the
+<code>PracTools</code> package.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">data</span>(nhis.large)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; Warning in data(nhis.large): data set &#39;nhis.large&#39; not found</span></span></code></pre></div>
 <p>We can obtain more information using:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>?nhis.large</span></code></pre></div>
-<p>In the following, our outcome of interest is whether an individual is covered by any type of health insurance (<code>notcov</code>, 1 = not covered, 0 = covered). We additionally prepare two sets of variables:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>?nhis.large</span></code></pre></div>
+<p>In the following, our outcome of interest is whether an individual is
+covered by any type of health insurance (<code>notcov</code>, 1 = not
+covered, 0 = covered). We additionally prepare two sets of
+variables:</p>
 <ul>
-<li>Predictor variables (age, parents in household, education, income, employment status, physical or other limitations)</li>
+<li>Predictor variables (age, parents in household, education, income,
+employment status, physical or other limitations)</li>
 <li>Subpopulation variables (sex, hispanic ethnicity, race)</li>
 </ul>
-<p>The second set of variables will not be used for training the initial prediction models, but will be our focus when it comes to evaluating prediction performance for subgroups.</p>
+<p>The second set of variables will not be used for training the initial
+prediction models, but will be our focus when it comes to evaluating
+prediction performance for subgroups.</p>
 <p>Before we training an initial model, we preprocess the data:</p>
 <ul>
 <li>We encode categorical features as <code>factor</code>.</li>
-<li>We explicitly assign <code>NA</code>s in categorical features to a dedicated factor level</li>
-<li>We drop <code>NA</code>s in the outcome variable <code>notcov</code></li>
-<li>We encode <code>notcov</code> as a factor variable instead of a dummy variable (1 = <code>notcov</code>, 0 = <code>cov</code>)</li>
-<li>We create a new feature <code>inv_wt</code> as the inverse of survey weights <code>svwyt</code></li>
+<li>We explicitly assign <code>NA</code>s in categorical features to a
+dedicated factor level</li>
+<li>We drop <code>NA</code>s in the outcome variable
+<code>notcov</code></li>
+<li>We encode <code>notcov</code> as a factor variable instead of a
+dummy variable (1 = <code>notcov</code>, 0 = <code>cov</code>)</li>
+<li>We create a new feature <code>inv_wt</code> as the inverse of survey
+weights <code>svwyt</code></li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>categorical &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;age.grp&quot;</span>, <span class="st">&quot;parents&quot;</span>, <span class="st">&quot;educ&quot;</span>, <span class="st">&quot;inc.grp&quot;</span>, <span class="st">&quot;doing.lw&quot;</span>,</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>  <span class="st">&quot;limited&quot;</span>, <span class="st">&quot;sex&quot;</span>, <span class="st">&quot;hisp&quot;</span>, <span class="st">&quot;race&quot;</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>nhis &lt;-<span class="st"> </span>nhis.large <span class="op">%&gt;%</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate_at</span>(categorical, as.factor) <span class="op">%&gt;%</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate_at</span>(categorical, fct_explicit_na) <span class="op">%&gt;%</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="st">  </span><span class="kw">drop_na</span>(notcov) <span class="op">%&gt;%</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="st">  </span><span class="kw">select</span>(<span class="kw">all_of</span>(categorical), notcov, svywt, ID)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>nhis<span class="op">$</span>notcov &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">ifelse</span>(nhis<span class="op">$</span>notcov <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;notcov&quot;</span>, <span class="st">&quot;cov&quot;</span>))</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>nhis_enc &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">model.matrix</span>(notcov <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> nhis)[,<span class="op">-</span><span class="dv">1</span>])</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>nhis_enc<span class="op">$</span>notcov &lt;-<span class="st"> </span>nhis<span class="op">$</span>notcov</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a>nhis_enc<span class="op">$</span>sex &lt;-<span class="st"> </span>nhis<span class="op">$</span>sex</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a>nhis_enc<span class="op">$</span>hisp &lt;-<span class="st"> </span>nhis<span class="op">$</span>hisp</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a>nhis_enc<span class="op">$</span>race &lt;-<span class="st"> </span>nhis<span class="op">$</span>race</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a>nhis_enc<span class="op">$</span>inv_wt &lt;-<span class="st"> </span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>nhis<span class="op">$</span>svywt)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>categorical <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;age.grp&quot;</span>, <span class="st">&quot;parents&quot;</span>, <span class="st">&quot;educ&quot;</span>, <span class="st">&quot;inc.grp&quot;</span>, <span class="st">&quot;doing.lw&quot;</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="st">&quot;limited&quot;</span>, <span class="st">&quot;sex&quot;</span>, <span class="st">&quot;hisp&quot;</span>, <span class="st">&quot;race&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>nhis <span class="ot">&lt;-</span> nhis.large <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="fu">mutate_at</span>(categorical, as.factor) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="fu">mutate_at</span>(categorical, fct_explicit_na) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="fu">drop_na</span>(notcov) <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">all_of</span>(categorical), notcov, svywt, ID)</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>nhis<span class="sc">$</span>notcov <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(nhis<span class="sc">$</span>notcov <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;notcov&quot;</span>, <span class="st">&quot;cov&quot;</span>))</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>nhis_enc <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">model.matrix</span>(notcov <span class="sc">~</span> ., <span class="at">data =</span> nhis)[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>nhis_enc<span class="sc">$</span>notcov <span class="ot">&lt;-</span> nhis<span class="sc">$</span>notcov</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>nhis_enc<span class="sc">$</span>sex <span class="ot">&lt;-</span> nhis<span class="sc">$</span>sex</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>nhis_enc<span class="sc">$</span>hisp <span class="ot">&lt;-</span> nhis<span class="sc">$</span>hisp</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>nhis_enc<span class="sc">$</span>race <span class="ot">&lt;-</span> nhis<span class="sc">$</span>race</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>nhis_enc<span class="sc">$</span>inv_wt <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">/</span> nhis<span class="sc">$</span>svywt)</span></code></pre></div>
 <p>The pre-processed NHIS data will be split into three datasets:</p>
 <ul>
-<li>A training set <code>train</code> for training the initial prediction models (55 % of data)</li>
-<li>An auditing set <code>post</code> for post-processing the initial models with MCBoost (20 %)</li>
+<li>A training set <code>train</code> for training the initial
+prediction models (55 % of data)</li>
+<li>An auditing set <code>post</code> for post-processing the initial
+models with MCBoost (20 %)</li>
 <li>A test set <code>test</code>for model evaluation (25 %)</li>
 </ul>
-<p>To increase the difficulty of the prediction task, we sample from the NHIS data such that the prevalence of demographic subgroups in the test data differs from their prevalence in the training and auditing data. This is achieved by employing weighted sampling from NHIS (variable <code>inv_wt</code> from above).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">set.seed</span>(<span class="dv">2953</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>test &lt;-<span class="st"> </span>nhis_enc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice_sample</span>(<span class="dt">prop =</span> <span class="fl">0.25</span>, <span class="dt">weight_by =</span> inv_wt)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>nontest_g &lt;-<span class="st"> </span>nhis_enc <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">anti_join</span>(test, <span class="dt">by =</span> <span class="st">&quot;ID&quot;</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>train_g &lt;-<span class="st"> </span>nontest_g <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice_sample</span>(<span class="dt">prop =</span> <span class="fl">0.75</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>post &lt;-<span class="st"> </span>nontest_g <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">anti_join</span>(train_g, <span class="dt">by =</span> <span class="st">&quot;ID&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>ID, <span class="op">-</span>svywt, <span class="op">-</span>inv_wt, <span class="op">-</span><span class="kw">c</span>(sex<span class="op">:</span>race))</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a>train &lt;-<span class="st"> </span>train_g <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>ID, <span class="op">-</span>svywt, <span class="op">-</span>inv_wt, <span class="op">-</span><span class="kw">c</span>(sex<span class="op">:</span>race), <span class="op">-</span><span class="kw">c</span>(sex2<span class="op">:</span>race3))</span></code></pre></div>
-<p>As a result, non-hispanic white individuals (<code>hisp2</code>) are overrepresented and hispanic individuals are underrepresented in both the training and auditing set, compared to their prevalence in the test set.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>train_g <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(sex2<span class="op">:</span>race3), mean)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="co"># hispanic individuals</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(train_g <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(hisp2<span class="op">:</span>hisp4), mean))</span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>post <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(sex2<span class="op">:</span>race3), mean)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="co"># hispanic individuals</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(post <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(hisp2<span class="op">:</span>hisp4), mean))</span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>test <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(sex2<span class="op">:</span>race3), mean)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="co"># hispanic individuals</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(test <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_at</span>(<span class="kw">vars</span>(hisp2<span class="op">:</span>hisp4), mean))</span></code></pre></div>
+<p>To increase the difficulty of the prediction task, we sample from the
+NHIS data such that the prevalence of demographic subgroups in the test
+data differs from their prevalence in the training and auditing data.
+This is achieved by employing weighted sampling from NHIS (variable
+<code>inv_wt</code> from above).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2953</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>test <span class="ot">&lt;-</span> nhis_enc <span class="sc">%&gt;%</span> <span class="fu">slice_sample</span>(<span class="at">prop =</span> <span class="fl">0.25</span>, <span class="at">weight_by =</span> inv_wt)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>nontest_g <span class="ot">&lt;-</span> nhis_enc <span class="sc">%&gt;%</span> <span class="fu">anti_join</span>(test, <span class="at">by =</span> <span class="st">&quot;ID&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>train_g <span class="ot">&lt;-</span> nontest_g <span class="sc">%&gt;%</span> <span class="fu">slice_sample</span>(<span class="at">prop =</span> <span class="fl">0.75</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>post <span class="ot">&lt;-</span> nontest_g <span class="sc">%&gt;%</span> <span class="fu">anti_join</span>(train_g, <span class="at">by =</span> <span class="st">&quot;ID&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>ID, <span class="sc">-</span>svywt, <span class="sc">-</span>inv_wt, <span class="sc">-</span><span class="fu">c</span>(sex<span class="sc">:</span>race))</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>train <span class="ot">&lt;-</span> train_g <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>ID, <span class="sc">-</span>svywt, <span class="sc">-</span>inv_wt, <span class="sc">-</span><span class="fu">c</span>(sex<span class="sc">:</span>race), <span class="sc">-</span><span class="fu">c</span>(sex2<span class="sc">:</span>race3))</span></code></pre></div>
+<p>As a result, non-hispanic white individuals (<code>hisp2</code>) are
+overrepresented and hispanic individuals are underrepresented in both
+the training and auditing set, compared to their prevalence in the test
+set.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>train_g <span class="sc">%&gt;%</span> <span class="fu">summarise_at</span>(<span class="fu">vars</span>(sex2<span class="sc">:</span>race3), mean)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co"># hispanic individuals</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(train_g <span class="sc">%&gt;%</span> <span class="fu">summarise_at</span>(<span class="fu">vars</span>(hisp2<span class="sc">:</span>hisp4), mean))</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>post <span class="sc">%&gt;%</span> <span class="fu">summarise_at</span>(<span class="fu">vars</span>(sex2<span class="sc">:</span>race3), mean)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co"># hispanic individuals</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(post <span class="sc">%&gt;%</span> <span class="fu">summarise_at</span>(<span class="fu">vars</span>(hisp2<span class="sc">:</span>hisp4), mean))</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>test <span class="sc">%&gt;%</span> <span class="fu">summarise_at</span>(<span class="fu">vars</span>(sex2<span class="sc">:</span>race3), mean)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co"># hispanic individuals</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(test <span class="sc">%&gt;%</span> <span class="fu">summarise_at</span>(<span class="fu">vars</span>(hisp2<span class="sc">:</span>hisp4), mean))</span></code></pre></div>
 </div>
 <div id="scenario-1-improve-subgroup-accuracy" class="section level2">
 <h2>Scenario 1: Improve Subgroup Accuracy</h2>
-<p>We train an initial model for predicting healthcare coverage with the training set. Here, we use a neural network with one hidden layer, rather naively with little tweaking.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>nnet &lt;-<span class="st"> </span><span class="kw">neuralnet</span>(notcov <span class="op">~</span><span class="st"> </span>.,</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>  <span class="dt">hidden =</span> <span class="dv">5</span>,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>  <span class="dt">linear.output =</span> <span class="ot">FALSE</span>,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>  <span class="dt">err.fct =</span> <span class="st">&#39;ce&#39;</span>,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>  <span class="dt">threshold =</span> <span class="fl">0.5</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>  <span class="dt">lifesign =</span> <span class="st">&#39;full&#39;</span>,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>  <span class="dt">data =</span> train</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a>)</span></code></pre></div>
+<p>We train an initial model for predicting healthcare coverage with the
+training set. Here, we use a neural network with one hidden layer,
+rather naively with little tweaking.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>nnet <span class="ot">&lt;-</span> <span class="fu">neuralnet</span>(notcov <span class="sc">~</span> .,</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="at">hidden =</span> <span class="dv">5</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">linear.output =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">err.fct =</span> <span class="st">&#39;ce&#39;</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="at">threshold =</span> <span class="fl">0.5</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="at">lifesign =</span> <span class="st">&#39;full&#39;</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="at">data =</span> train</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>)</span></code></pre></div>
 <div id="mcboost-auditing" class="section level3">
 <h3>MCBoost Auditing</h3>
-<p>We prepare a function that allows us to pass the predictions of the model to MCBoost for post-processing.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>init_nnet =<span class="st"> </span><span class="cf">function</span>(data) {</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>  <span class="kw">predict</span>(nnet, data)[, <span class="dv">2</span>]</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a>}</span></code></pre></div>
-<p>To showcase different use cases of MCBoost, we prepare two post-processing data sets based on the auditing set. The first set includes only the predictor variables that were used by the initial models, whereas the second set will allow post-processing based on our demographic subgroups of interest (sex, hispanic ethnicity, race).</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>d1 &lt;-<span class="st"> </span><span class="kw">select</span>(post, <span class="op">-</span><span class="kw">c</span>(notcov, sex2<span class="op">:</span>race3))</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>d2 &lt;-<span class="st"> </span><span class="kw">select</span>(post, <span class="op">-</span>notcov)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a>l &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">one_hot</span>(post<span class="op">$</span>notcov)</span></code></pre></div>
-<p>We initialize two custom auditors for MCBoost: Ridge regression with a small penalty on model complexity, and a <code>SubpopAuditorFitter</code> with a fixed set of subpopulations.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>ridge =<span class="st"> </span>LearnerAuditorFitter<span class="op">$</span><span class="kw">new</span>(<span class="kw">lrn</span>(<span class="st">&quot;regr.glmnet&quot;</span>, <span class="dt">alpha =</span> <span class="dv">0</span>, <span class="dt">lambda =</span> <span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="kw">nrow</span>(post)))</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>pops =<span class="st"> </span>SubpopAuditorFitter<span class="op">$</span><span class="kw">new</span>(<span class="kw">list</span>(<span class="st">&quot;sex2&quot;</span>, <span class="st">&quot;hisp2&quot;</span>, <span class="st">&quot;hisp3&quot;</span>, <span class="st">&quot;hisp4&quot;</span>, <span class="st">&quot;race2&quot;</span>, <span class="st">&quot;race3&quot;</span>))</span></code></pre></div>
-<p>The ridge regression will only be given access to the initial predictor variables when post-processing the neural net predictions with the auditing data. In contrast, we guide the subpop-fitter to audit the initial predictions explicitly on the outlined subpopulations (sex, hispanic ethnicity, race). In summary, we have:</p>
+<p>We prepare a function that allows us to pass the predictions of the
+model to MCBoost for post-processing.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>init_nnet <span class="ot">=</span> <span class="cf">function</span>(data) {</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="fu">predict</span>(nnet, data)[, <span class="dv">2</span>]</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>}</span></code></pre></div>
+<p>To showcase different use cases of MCBoost, we prepare two
+post-processing data sets based on the auditing set. The first set
+includes only the predictor variables that were used by the initial
+models, whereas the second set will allow post-processing based on our
+demographic subgroups of interest (sex, hispanic ethnicity, race).</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">select</span>(post, <span class="sc">-</span><span class="fu">c</span>(notcov, sex2<span class="sc">:</span>race3))</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">select</span>(post, <span class="sc">-</span>notcov)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">one_hot</span>(post<span class="sc">$</span>notcov)</span></code></pre></div>
+<p>We initialize two custom auditors for MCBoost: Ridge regression with
+a small penalty on model complexity, and a
+<code>SubpopAuditorFitter</code> with a fixed set of subpopulations.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>ridge <span class="ot">=</span> LearnerAuditorFitter<span class="sc">$</span><span class="fu">new</span>(<span class="fu">lrn</span>(<span class="st">&quot;regr.glmnet&quot;</span>, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lambda =</span> <span class="dv">2</span> <span class="sc">/</span> <span class="fu">nrow</span>(post)))</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>pops <span class="ot">=</span> SubpopAuditorFitter<span class="sc">$</span><span class="fu">new</span>(<span class="fu">list</span>(<span class="st">&quot;sex2&quot;</span>, <span class="st">&quot;hisp2&quot;</span>, <span class="st">&quot;hisp3&quot;</span>, <span class="st">&quot;hisp4&quot;</span>, <span class="st">&quot;race2&quot;</span>, <span class="st">&quot;race3&quot;</span>))</span></code></pre></div>
+<p>The ridge regression will only be given access to the initial
+predictor variables when post-processing the neural net predictions with
+the auditing data. In contrast, we guide the subpop-fitter to audit the
+initial predictions explicitly on the outlined subpopulations (sex,
+hispanic ethnicity, race). In summary, we have:</p>
 <ul>
 <li><code>nnet</code>: Initial neural net</li>
-<li><code>nnet_mc_ridge</code>: Neural net, post-processed with ridge regression and the initial set of predictor variables</li>
-<li><code>nnet_mc_subpop</code>: Neural net, post-processed with a fixed set of subpopulations</li>
+<li><code>nnet_mc_ridge</code>: Neural net, post-processed with ridge
+regression and the initial set of predictor variables</li>
+<li><code>nnet_mc_subpop</code>: Neural net, post-processed with a fixed
+set of subpopulations</li>
 </ul>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>nnet_mc_ridge =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">init_predictor =</span> init_nnet,</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>                            <span class="dt">auditor_fitter =</span> ridge,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a>                            <span class="dt">multiplicative =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a>                            <span class="dt">partition =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a>                            <span class="dt">max_iter =</span> <span class="dv">15</span>)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a>nnet_mc_ridge<span class="op">$</span><span class="kw">multicalibrate</span>(d1, l)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a>nnet_mc_subpop =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">init_predictor =</span> init_nnet,</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a>                             <span class="dt">auditor_fitter =</span> pops,</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true"></a>                             <span class="dt">partition =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true"></a>                             <span class="dt">max_iter =</span> <span class="dv">15</span>)</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true"></a>nnet_mc_subpop<span class="op">$</span><span class="kw">multicalibrate</span>(d2, l)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>nnet_mc_ridge <span class="ot">=</span> MCBoost<span class="sc">$</span><span class="fu">new</span>(<span class="at">init_predictor =</span> init_nnet,</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>                            <span class="at">auditor_fitter =</span> ridge,</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>                            <span class="at">multiplicative =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>                            <span class="at">partition =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>                            <span class="at">max_iter =</span> <span class="dv">15</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>nnet_mc_ridge<span class="sc">$</span><span class="fu">multicalibrate</span>(d1, l)</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>nnet_mc_subpop <span class="ot">=</span> MCBoost<span class="sc">$</span><span class="fu">new</span>(<span class="at">init_predictor =</span> init_nnet,</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>                             <span class="at">auditor_fitter =</span> pops,</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>                             <span class="at">partition =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>                             <span class="at">max_iter =</span> <span class="dv">15</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>nnet_mc_subpop<span class="sc">$</span><span class="fu">multicalibrate</span>(d2, l)</span></code></pre></div>
 </div>
 <div id="model-evaluation" class="section level3">
 <h3>Model Evaluation</h3>
-<p>Next, we use the initial and post-processed models to predict the outcome in the test data. We compute predicted probabilities and class predictions.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>test<span class="op">$</span>nnet &lt;-<span class="st"> </span><span class="kw">predict</span>(nnet, <span class="dt">newdata =</span> test)[, <span class="dv">2</span>]</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>test<span class="op">$</span>nnet_mc_ridge &lt;-<span class="st"> </span>nnet_mc_ridge<span class="op">$</span><span class="kw">predict_probs</span>(test)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>test<span class="op">$</span>nnet_mc_subpop &lt;-<span class="st"> </span>nnet_mc_subpop<span class="op">$</span><span class="kw">predict_probs</span>(test)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a>test<span class="op">$</span>c_nnet &lt;-<span class="st"> </span><span class="kw">round</span>(test<span class="op">$</span>nnet)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a>test<span class="op">$</span>c_nnet_mc_ridge &lt;-<span class="st"> </span><span class="kw">round</span>(test<span class="op">$</span>nnet_mc_ridge)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true"></a>test<span class="op">$</span>c_nnet_mc_subpop &lt;-<span class="st"> </span><span class="kw">round</span>(test<span class="op">$</span>nnet_mc_subpop)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true"></a>test<span class="op">$</span>label &lt;-<span class="st"> </span><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">one_hot</span>(test<span class="op">$</span>notcov)</span></code></pre></div>
-<p>Here we compare the overall accuracy of the initial and post-processed models. Overall, we observe little differences in performance.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="kw">mean</span>(test<span class="op">$</span>c_nnet <span class="op">==</span><span class="st"> </span>test<span class="op">$</span>label)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a><span class="kw">mean</span>(test<span class="op">$</span>c_nnet_mc_ridge <span class="op">==</span><span class="st"> </span>test<span class="op">$</span>label)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a><span class="kw">mean</span>(test<span class="op">$</span>c_nnet_mc_subpop <span class="op">==</span><span class="st"> </span>test<span class="op">$</span>label)</span></code></pre></div>
-<p>However, we might be concerned with model performance for smaller subpopulations. In the following, we focus on subgroups defined by 2-way conjunctions of sex, hispanic ethnicity, and race.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a>test &lt;-<span class="st"> </span>test <span class="op">%&gt;%</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">group_by</span>(sex, hisp) <span class="op">%&gt;%</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sex_hisp =</span> <span class="kw">cur_group_id</span>()) <span class="op">%&gt;%</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a><span class="st">  </span><span class="kw">group_by</span>(sex, race) <span class="op">%&gt;%</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sex_race =</span> <span class="kw">cur_group_id</span>()) <span class="op">%&gt;%</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true"></a><span class="st">  </span><span class="kw">group_by</span>(hisp, race) <span class="op">%&gt;%</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">hisp_race =</span> <span class="kw">cur_group_id</span>()) <span class="op">%&gt;%</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true"></a></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true"></a>grouping_vars &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;hisp&quot;</span>, <span class="st">&quot;race&quot;</span>, <span class="st">&quot;sex_hisp&quot;</span>, <span class="st">&quot;sex_race&quot;</span>, <span class="st">&quot;hisp_race&quot;</span>)</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true"></a></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true"></a>eval &lt;-<span class="st"> </span><span class="kw">map</span>(grouping_vars, group_by_at, <span class="dt">.tbl =</span> test) <span class="op">%&gt;%</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true"></a><span class="st">  </span><span class="kw">map</span>(summarise,</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true"></a>      <span class="st">&#39;accuracy_nnet&#39;</span> =<span class="st"> </span><span class="kw">mean</span>(c_nnet <span class="op">==</span><span class="st"> </span>label),</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true"></a>      <span class="st">&#39;accuracy_nnet_mc_ridge&#39;</span> =<span class="st"> </span><span class="kw">mean</span>(c_nnet_mc_ridge <span class="op">==</span><span class="st"> </span>label),</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true"></a>      <span class="st">&#39;accuracy_nnet_mc_subpop&#39;</span> =<span class="st"> </span><span class="kw">mean</span>(c_nnet_mc_subpop <span class="op">==</span><span class="st"> </span>label),</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true"></a>      <span class="st">&#39;size&#39;</span> =<span class="st"> </span><span class="kw">n</span>()) <span class="op">%&gt;%</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span></code></pre></div>
-<p>We evaluate classification accuracy on these subpopulations, and order the results according to the size of the selected subgroups (<code>size</code>). Subgroup accuracy varies between methods, with MCBoost-Ridge (<code>nnet_mc_ridge</code>) and MCBoost-Subpop (<code>nnet_mc_subpop</code>) stabilizing subgroup performance when compared to the initial model, respectively.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a>eval <span class="op">%&gt;%</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(size)) <span class="op">%&gt;%</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">select</span>(size, accuracy_nnet<span class="op">:</span>accuracy_nnet_mc_subpop) <span class="op">%&gt;%</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a><span class="st">  </span><span class="kw">round</span>(., <span class="dt">digits =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">formattable</span>(., <span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(eval), <span class="cf">function</span>(row) {</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true"></a>  <span class="kw">area</span>(row, <span class="dt">col =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>) <span class="op">~</span><span class="st"> </span><span class="kw">color_tile</span>(<span class="st">&quot;transparent&quot;</span>, <span class="st">&quot;lightgreen&quot;</span>)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true"></a>    }))</span></code></pre></div>
+<p>Next, we use the initial and post-processed models to predict the
+outcome in the test data. We compute predicted probabilities and class
+predictions.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>test<span class="sc">$</span>nnet <span class="ot">&lt;-</span> <span class="fu">predict</span>(nnet, <span class="at">newdata =</span> test)[, <span class="dv">2</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>test<span class="sc">$</span>nnet_mc_ridge <span class="ot">&lt;-</span> nnet_mc_ridge<span class="sc">$</span><span class="fu">predict_probs</span>(test)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>test<span class="sc">$</span>nnet_mc_subpop <span class="ot">&lt;-</span> nnet_mc_subpop<span class="sc">$</span><span class="fu">predict_probs</span>(test)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>test<span class="sc">$</span>c_nnet <span class="ot">&lt;-</span> <span class="fu">round</span>(test<span class="sc">$</span>nnet)</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>test<span class="sc">$</span>c_nnet_mc_ridge <span class="ot">&lt;-</span> <span class="fu">round</span>(test<span class="sc">$</span>nnet_mc_ridge)</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>test<span class="sc">$</span>c_nnet_mc_subpop <span class="ot">&lt;-</span> <span class="fu">round</span>(test<span class="sc">$</span>nnet_mc_subpop)</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>test<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">one_hot</span>(test<span class="sc">$</span>notcov)</span></code></pre></div>
+<p>Here we compare the overall accuracy of the initial and
+post-processed models. Overall, we observe little differences in
+performance.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">mean</span>(test<span class="sc">$</span>c_nnet <span class="sc">==</span> test<span class="sc">$</span>label)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">mean</span>(test<span class="sc">$</span>c_nnet_mc_ridge <span class="sc">==</span> test<span class="sc">$</span>label)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">mean</span>(test<span class="sc">$</span>c_nnet_mc_subpop <span class="sc">==</span> test<span class="sc">$</span>label)</span></code></pre></div>
+<p>However, we might be concerned with model performance for smaller
+subpopulations. In the following, we focus on subgroups defined by 2-way
+conjunctions of sex, hispanic ethnicity, and race.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>test <span class="ot">&lt;-</span> test <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="fu">group_by</span>(sex, hisp) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sex_hisp =</span> <span class="fu">cur_group_id</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="fu">group_by</span>(sex, race) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sex_race =</span> <span class="fu">cur_group_id</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>  <span class="fu">group_by</span>(hisp, race) <span class="sc">%&gt;%</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hisp_race =</span> <span class="fu">cur_group_id</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>grouping_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;hisp&quot;</span>, <span class="st">&quot;race&quot;</span>, <span class="st">&quot;sex_hisp&quot;</span>, <span class="st">&quot;sex_race&quot;</span>, <span class="st">&quot;hisp_race&quot;</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>eval <span class="ot">&lt;-</span> <span class="fu">map</span>(grouping_vars, group_by_at, <span class="at">.tbl =</span> test) <span class="sc">%&gt;%</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>  <span class="fu">map</span>(summarise,</span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>      <span class="st">&#39;accuracy_nnet&#39;</span> <span class="ot">=</span> <span class="fu">mean</span>(c_nnet <span class="sc">==</span> label),</span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>      <span class="st">&#39;accuracy_nnet_mc_ridge&#39;</span> <span class="ot">=</span> <span class="fu">mean</span>(c_nnet_mc_ridge <span class="sc">==</span> label),</span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>      <span class="st">&#39;accuracy_nnet_mc_subpop&#39;</span> <span class="ot">=</span> <span class="fu">mean</span>(c_nnet_mc_subpop <span class="sc">==</span> label),</span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>      <span class="st">&#39;size&#39;</span> <span class="ot">=</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span></code></pre></div>
+<p>We evaluate classification accuracy on these subpopulations, and
+order the results according to the size of the selected subgroups
+(<code>size</code>). Subgroup accuracy varies between methods, with
+MCBoost-Ridge (<code>nnet_mc_ridge</code>) and MCBoost-Subpop
+(<code>nnet_mc_subpop</code>) stabilizing subgroup performance when
+compared to the initial model, respectively.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>eval <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(size)) <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="fu">select</span>(size, accuracy_nnet<span class="sc">:</span>accuracy_nnet_mc_subpop) <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>  <span class="fu">round</span>(., <span class="at">digits =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>  <span class="fu">formattable</span>(., <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(eval), <span class="cf">function</span>(row) {</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>  <span class="fu">area</span>(row, <span class="at">col =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>) <span class="sc">~</span> <span class="fu">color_tile</span>(<span class="st">&quot;transparent&quot;</span>, <span class="st">&quot;lightgreen&quot;</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>    }))</span></code></pre></div>
 </div>
 </div>
 <div id="scenario-2-improve-subgroup-calibration" class="section level2">
 <h2>Scenario 2: Improve Subgroup Calibration</h2>
-<p>In this scenario, we use a random forest with the default settings of the ranger package as the initial predictor.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a>rf &lt;-<span class="st"> </span><span class="kw">ranger</span>(notcov <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train, <span class="dt">probability =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p>In this scenario, we use a random forest with the default settings of
+the ranger package as the initial predictor.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">ranger</span>(notcov <span class="sc">~</span> ., <span class="at">data =</span> train, <span class="at">probability =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <div id="mcboost-auditing-1" class="section level3">
 <h3>MCBoost Auditing</h3>
-<p>We again prepare a function to pass the predictions to MCBoost for post-processing.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a>init_rf =<span class="st"> </span><span class="cf">function</span>(data) {</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>  <span class="kw">predict</span>(rf, data)<span class="op">$</span>prediction[, <span class="dv">2</span>]</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>}</span></code></pre></div>
-<p>We use two custom auditors for MCBoost, i.e., ridge and lasso regression with different penalties on model complexity.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a>ridge =<span class="st"> </span>LearnerAuditorFitter<span class="op">$</span><span class="kw">new</span>(<span class="kw">lrn</span>(<span class="st">&quot;regr.glmnet&quot;</span>, <span class="dt">alpha =</span> <span class="dv">0</span>, <span class="dt">lambda =</span> <span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="kw">nrow</span>(post)))</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>lasso =<span class="st"> </span>LearnerAuditorFitter<span class="op">$</span><span class="kw">new</span>(<span class="kw">lrn</span>(<span class="st">&quot;regr.glmnet&quot;</span>, <span class="dt">alpha =</span> <span class="dv">1</span>, <span class="dt">lambda =</span> <span class="dv">40</span> <span class="op">/</span><span class="st"> </span><span class="kw">nrow</span>(post)))</span></code></pre></div>
-<p>The ridge regression will only be given access to the initial predictor variables when post-processing the random forest predictions. In contrast, we allow the lasso regression to audit the initial predictions both with the initial predictors and the subpopulations (sex, hispanic ethnicity, race). In summary, we have:</p>
+<p>We again prepare a function to pass the predictions to MCBoost for
+post-processing.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>init_rf <span class="ot">=</span> <span class="cf">function</span>(data) {</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  <span class="fu">predict</span>(rf, data)<span class="sc">$</span>prediction[, <span class="dv">2</span>]</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>}</span></code></pre></div>
+<p>We use two custom auditors for MCBoost, i.e., ridge and lasso
+regression with different penalties on model complexity.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>ridge <span class="ot">=</span> LearnerAuditorFitter<span class="sc">$</span><span class="fu">new</span>(<span class="fu">lrn</span>(<span class="st">&quot;regr.glmnet&quot;</span>, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lambda =</span> <span class="dv">2</span> <span class="sc">/</span> <span class="fu">nrow</span>(post)))</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>lasso <span class="ot">=</span> LearnerAuditorFitter<span class="sc">$</span><span class="fu">new</span>(<span class="fu">lrn</span>(<span class="st">&quot;regr.glmnet&quot;</span>, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">lambda =</span> <span class="dv">40</span> <span class="sc">/</span> <span class="fu">nrow</span>(post)))</span></code></pre></div>
+<p>The ridge regression will only be given access to the initial
+predictor variables when post-processing the random forest predictions.
+In contrast, we allow the lasso regression to audit the initial
+predictions both with the initial predictors and the subpopulations
+(sex, hispanic ethnicity, race). In summary, we have:</p>
 <ul>
 <li><code>rf</code>: Initial random forest</li>
-<li><code>rf_mc_ridge</code>: Random forest, post-processed with ridge regression and the initial set of predictor variables</li>
-<li><code>rf_mc_lasso</code>: Random forest, post-processed with lasso regression and the extended set of predictors</li>
+<li><code>rf_mc_ridge</code>: Random forest, post-processed with ridge
+regression and the initial set of predictor variables</li>
+<li><code>rf_mc_lasso</code>: Random forest, post-processed with lasso
+regression and the extended set of predictors</li>
 </ul>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a>rf_mc_ridge =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">init_predictor =</span> init_rf,</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a>                          <span class="dt">auditor_fitter =</span> ridge,</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a>                          <span class="dt">multiplicative =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a>                          <span class="dt">partition =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a>                          <span class="dt">max_iter =</span> <span class="dv">15</span>)</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true"></a>rf_mc_ridge<span class="op">$</span><span class="kw">multicalibrate</span>(d1, l)</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true"></a></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true"></a>rf_mc_lasso =<span class="st"> </span>MCBoost<span class="op">$</span><span class="kw">new</span>(<span class="dt">init_predictor =</span> init_rf,</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true"></a>                          <span class="dt">auditor_fitter =</span> lasso,</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true"></a>                          <span class="dt">multiplicative =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true"></a>                          <span class="dt">partition =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true"></a>                          <span class="dt">max_iter =</span> <span class="dv">15</span>)</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true"></a>rf_mc_lasso<span class="op">$</span><span class="kw">multicalibrate</span>(d2, l)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>rf_mc_ridge <span class="ot">=</span> MCBoost<span class="sc">$</span><span class="fu">new</span>(<span class="at">init_predictor =</span> init_rf,</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>                          <span class="at">auditor_fitter =</span> ridge,</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>                          <span class="at">multiplicative =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>                          <span class="at">partition =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>                          <span class="at">max_iter =</span> <span class="dv">15</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>rf_mc_ridge<span class="sc">$</span><span class="fu">multicalibrate</span>(d1, l)</span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>rf_mc_lasso <span class="ot">=</span> MCBoost<span class="sc">$</span><span class="fu">new</span>(<span class="at">init_predictor =</span> init_rf,</span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>                          <span class="at">auditor_fitter =</span> lasso,</span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>                          <span class="at">multiplicative =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a>                          <span class="at">partition =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a>                          <span class="at">max_iter =</span> <span class="dv">15</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a>rf_mc_lasso<span class="sc">$</span><span class="fu">multicalibrate</span>(d2, l)</span></code></pre></div>
 </div>
 <div id="model-evaluation-1" class="section level3">
 <h3>Model Evaluation</h3>
-<p>We again compute predicted probabilities and class predictions using the initial and post-processed models.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a>test<span class="op">$</span>rf &lt;-<span class="st"> </span><span class="kw">predict</span>(rf, test)<span class="op">$</span>prediction[, <span class="dv">2</span>]</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>test<span class="op">$</span>rf_mc_ridge &lt;-<span class="st"> </span>rf_mc_ridge<span class="op">$</span><span class="kw">predict_probs</span>(test)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a>test<span class="op">$</span>rf_mc_lasso &lt;-<span class="st"> </span>rf_mc_lasso<span class="op">$</span><span class="kw">predict_probs</span>(test)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true"></a></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a>test<span class="op">$</span>c_rf &lt;-<span class="st"> </span><span class="kw">round</span>(test<span class="op">$</span>rf)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true"></a>test<span class="op">$</span>c_rf_mc_ridge &lt;-<span class="st"> </span><span class="kw">round</span>(test<span class="op">$</span>rf_mc_ridge)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true"></a>test<span class="op">$</span>c_rf_mc_lasso &lt;-<span class="st"> </span><span class="kw">round</span>(test<span class="op">$</span>rf_mc_lasso)</span></code></pre></div>
-<p>Here we compare the overall accuracy of the initial and post-processed models. As before, we observe small differences in overall performance.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="kw">mean</span>(test<span class="op">$</span>c_rf <span class="op">==</span><span class="st"> </span>test<span class="op">$</span>label)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a><span class="kw">mean</span>(test<span class="op">$</span>c_rf_mc_ridge <span class="op">==</span><span class="st"> </span>test<span class="op">$</span>label)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a><span class="kw">mean</span>(test<span class="op">$</span>c_rf_mc_lasso <span class="op">==</span><span class="st"> </span>test<span class="op">$</span>label)</span></code></pre></div>
-<p>However, we might be concerned with calibration in subpopulations. In the following we focus on subgroups defined by 2-way conjunctions of sex, hispanic ethnicity, and race.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a>eval &lt;-<span class="st"> </span><span class="kw">map</span>(grouping_vars, group_by_at, <span class="dt">.tbl =</span> test) <span class="op">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">map</span>(summarise,</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a>      <span class="st">&#39;bias_rf&#39;</span> =<span class="st"> </span><span class="kw">abs</span>(<span class="kw">mean</span>(rf) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(label))<span class="op">*</span><span class="dv">100</span>,</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true"></a>      <span class="st">&#39;bias_rf_mc_ridge&#39;</span> =<span class="st"> </span><span class="kw">abs</span>(<span class="kw">mean</span>(rf_mc_ridge) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(label))<span class="op">*</span><span class="dv">100</span>,</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true"></a>      <span class="st">&#39;bias_rf_mc_lasso&#39;</span> =<span class="st"> </span><span class="kw">abs</span>(<span class="kw">mean</span>(rf_mc_lasso) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(label))<span class="op">*</span><span class="dv">100</span>,</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true"></a>      <span class="st">&#39;size&#39;</span> =<span class="st"> </span><span class="kw">n</span>()) <span class="op">%&gt;%</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true"></a><span class="st">  </span><span class="kw">bind_rows</span>()</span></code></pre></div>
-<p>This evaluation focuses on the difference between the average predicted risk of healthcare non-coverage and the observed proportion of non-coverage in the test data for subgroups. Considering the MCBoost-Ridge (<code>rf_mc_ridge</code>) and MCBoost-Lasso (<code>rf_mc_lasso</code>) results, post-processing with MCBoost reduces bias for many subpopulations.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a>eval <span class="op">%&gt;%</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(size)) <span class="op">%&gt;%</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">select</span>(size, bias_rf<span class="op">:</span>bias_rf_mc_lasso) <span class="op">%&gt;%</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a><span class="st">  </span><span class="kw">round</span>(., <span class="dt">digits =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true"></a><span class="st">  </span><span class="kw">formattable</span>(., <span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(eval), <span class="cf">function</span>(row) {</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true"></a>  <span class="kw">area</span>(row, <span class="dt">col =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>) <span class="op">~</span><span class="st"> </span><span class="kw">color_tile</span>(<span class="st">&quot;lightgreen&quot;</span>, <span class="st">&quot;transparent&quot;</span>)</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true"></a>    }))</span></code></pre></div>
+<p>We again compute predicted probabilities and class predictions using
+the initial and post-processed models.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>test<span class="sc">$</span>rf <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf, test)<span class="sc">$</span>prediction[, <span class="dv">2</span>]</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>test<span class="sc">$</span>rf_mc_ridge <span class="ot">&lt;-</span> rf_mc_ridge<span class="sc">$</span><span class="fu">predict_probs</span>(test)</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>test<span class="sc">$</span>rf_mc_lasso <span class="ot">&lt;-</span> rf_mc_lasso<span class="sc">$</span><span class="fu">predict_probs</span>(test)</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>test<span class="sc">$</span>c_rf <span class="ot">&lt;-</span> <span class="fu">round</span>(test<span class="sc">$</span>rf)</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>test<span class="sc">$</span>c_rf_mc_ridge <span class="ot">&lt;-</span> <span class="fu">round</span>(test<span class="sc">$</span>rf_mc_ridge)</span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>test<span class="sc">$</span>c_rf_mc_lasso <span class="ot">&lt;-</span> <span class="fu">round</span>(test<span class="sc">$</span>rf_mc_lasso)</span></code></pre></div>
+<p>Here we compare the overall accuracy of the initial and
+post-processed models. As before, we observe small differences in
+overall performance.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">mean</span>(test<span class="sc">$</span>c_rf <span class="sc">==</span> test<span class="sc">$</span>label)</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="fu">mean</span>(test<span class="sc">$</span>c_rf_mc_ridge <span class="sc">==</span> test<span class="sc">$</span>label)</span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="fu">mean</span>(test<span class="sc">$</span>c_rf_mc_lasso <span class="sc">==</span> test<span class="sc">$</span>label)</span></code></pre></div>
+<p>However, we might be concerned with calibration in subpopulations. In
+the following we focus on subgroups defined by 2-way conjunctions of
+sex, hispanic ethnicity, and race.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>eval <span class="ot">&lt;-</span> <span class="fu">map</span>(grouping_vars, group_by_at, <span class="at">.tbl =</span> test) <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>  <span class="fu">map</span>(summarise,</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>      <span class="st">&#39;bias_rf&#39;</span> <span class="ot">=</span> <span class="fu">abs</span>(<span class="fu">mean</span>(rf) <span class="sc">-</span> <span class="fu">mean</span>(label))<span class="sc">*</span><span class="dv">100</span>,</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>      <span class="st">&#39;bias_rf_mc_ridge&#39;</span> <span class="ot">=</span> <span class="fu">abs</span>(<span class="fu">mean</span>(rf_mc_ridge) <span class="sc">-</span> <span class="fu">mean</span>(label))<span class="sc">*</span><span class="dv">100</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>      <span class="st">&#39;bias_rf_mc_lasso&#39;</span> <span class="ot">=</span> <span class="fu">abs</span>(<span class="fu">mean</span>(rf_mc_lasso) <span class="sc">-</span> <span class="fu">mean</span>(label))<span class="sc">*</span><span class="dv">100</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>      <span class="st">&#39;size&#39;</span> <span class="ot">=</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span></code></pre></div>
+<p>This evaluation focuses on the difference between the average
+predicted risk of healthcare non-coverage and the observed proportion of
+non-coverage in the test data for subgroups. Considering the
+MCBoost-Ridge (<code>rf_mc_ridge</code>) and MCBoost-Lasso
+(<code>rf_mc_lasso</code>) results, post-processing with MCBoost reduces
+bias for many subpopulations.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>eval <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(size)) <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  <span class="fu">select</span>(size, bias_rf<span class="sc">:</span>bias_rf_mc_lasso) <span class="sc">%&gt;%</span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>  <span class="fu">round</span>(., <span class="at">digits =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>  <span class="fu">formattable</span>(., <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(eval), <span class="cf">function</span>(row) {</span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>  <span class="fu">area</span>(row, <span class="at">col =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>) <span class="sc">~</span> <span class="fu">color_tile</span>(<span class="st">&quot;lightgreen&quot;</span>, <span class="st">&quot;transparent&quot;</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>    }))</span></code></pre></div>
 </div>
 </div>
 
